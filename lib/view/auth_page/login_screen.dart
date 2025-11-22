@@ -24,208 +24,197 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: const Color(0xFFF8FFF8),
-      child: SafeArea(
-        child: Scaffold(
-          backgroundColor: const Color(0xFFF8FFF8),
-          body: SingleChildScrollView(
-            physics: const BouncingScrollPhysics(),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Header Section
-                Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 24),
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [
-                        AppColors.appPrimaryDarkColor.withOpacity(0.9),
-                        AppColors.appPrimaryDarkColor.withOpacity(0.7),
-                      ],
-                    ),
-                    borderRadius: const BorderRadius.only(
-                      bottomLeft: Radius.circular(40),
-                      bottomRight: Radius.circular(40),
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: AppColors.appPrimaryDarkColor.withOpacity(0.3),
-                        blurRadius: 25,
-                        offset: const Offset(0, 10),
-                      ),
+    return Scaffold(
+      backgroundColor: const Color(0xFFF8FFF8),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Header Section
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 24),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [
+                      AppColors.appPrimaryDarkColor,
+                      AppColors.appPrimaryDarkColor,
                     ],
                   ),
-                  child: Column(
-                    children: [
-                      // Logo Section
-                      Container(
-                        padding: const EdgeInsets.all(20),
-                        decoration: BoxDecoration(
-                          color: AppColors.appWhiteColor.withOpacity(0.95),
-                          shape: BoxShape.circle,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.15),
-                              blurRadius: 15,
-                              offset: const Offset(0, 8),
-                            ),
-                          ],
-                        ),
-                        child: Stack(
-                          alignment: Alignment.center,
-                          children: [
-                            Image.asset(
-                              'assets/app_images/app-logo.png',
-                              height: 80,
-                              width: 80,
-                              fit: BoxFit.contain,
-                            ),
-                            Positioned(
-                              bottom: -5,
-                              child: CustomSvg(
-                                path: SvgPath.victoriaFarm,
-                                height: 25,
-                              ),
-                            ),
-                          ],
-                        ),
+                  borderRadius: const BorderRadius.only(
+                    bottomLeft: Radius.circular(40),
+                    bottomRight: Radius.circular(40),
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: AppColors.appPrimaryDarkColor.withOpacity(0.3),
+                      blurRadius: 25,
+                      offset: const Offset(0, 10),
+                    ),
+                  ],
+                ),
+                child: Column(
+                  children: [
+                    // Logo Section
+                    Container(
+                      decoration: BoxDecoration(
+                        // color: AppColors.appWhiteColor.withOpacity(0.95),
+                        // shape: BoxShape.circle,
+                        // boxShadow: [
+                        //   BoxShadow(
+                        //     color: Colors.black.withOpacity(0.15),
+                        //     blurRadius: 15,
+                        //     offset: const Offset(0, 8),
+                        //   ),
+                        // ],
                       ),
-                      const SizedBox(height: 20),
-                      Text(
-                        "welcome_back".tr,
-                        style: AppTextStyle.large28.copyWith(
-                          fontFamily: FontFamily.bold,
-                          fontWeight: FontWeight.w700,
-                          color: AppColors.appWhiteColor,
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          Image.asset(
+                            'assets/app_images/app-logo.png',
+                            height: 180,
+                            width: 180,
+                            fit: BoxFit.contain,
+                          ),
+        
+                        ],
+                      ),
+                    ),
+                    Text(
+                      "welcome_back".tr,
+                      style: AppTextStyle.large28.copyWith(
+                        fontFamily: FontFamily.bold,
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.appWhiteColor,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      "sign_in_continue".tr,
+                      style: AppTextStyle.small16.copyWith(
+                        color: AppColors.appWhiteColor.withOpacity(0.9),
+                        fontWeight: FontWeight.w400,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+              ),
+        
+              const SizedBox(height: 20),
+        
+              // Login Form Card
+              Container(
+                width: double.infinity,
+                margin: const EdgeInsets.symmetric(horizontal: 20),
+                padding: const EdgeInsets.all(30),
+                decoration: BoxDecoration(
+                  color: AppColors.appWhiteColor,
+                  borderRadius: BorderRadius.circular(25),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.1),
+                      blurRadius: 25,
+                      offset: const Offset(0, 10),
+                    ),
+                  ],
+                  border: Border.all(
+                    color: AppColors.appPrimaryDarkColor.withOpacity(0.1),
+                    width: 1.5,
+                  ),
+                ),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Center(
+                        child: Text(
+                          "login_account".tr,
+                          style: AppTextStyle.medium24.copyWith(
+                            fontFamily: FontFamily.bold,
+                            fontWeight: FontWeight.w700,
+                            color: AppColors.appPrimaryDarkColor,
+                          ),
                         ),
                       ),
                       const SizedBox(height: 8),
-                      Text(
-                        "sign_in_continue".tr,
-                        style: AppTextStyle.small16.copyWith(
-                          color: AppColors.appWhiteColor.withOpacity(0.9),
-                          fontWeight: FontWeight.w400,
+                      Center(
+                        child: Text(
+                          "enter_credentials".tr,
+                          style: AppTextStyle.small14.copyWith(
+                            color: Colors.grey.shade600,
+                          ),
                         ),
-                        textAlign: TextAlign.center,
                       ),
+                      const SizedBox(height: 30),
+        
+                      // Contact Field
+                      _buildTextFieldWithIcon(
+                        controller: phoneController,
+                        hintText: "enter_contact".tr,
+                        title: "contact".tr,
+                        icon: Icons.phone,
+                        keyboardType: TextInputType.phone,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'contact_required'.tr;
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 20),
+        
+                      // Password Field
+                      _buildPasswordField(),
+                      const SizedBox(height: 30),
+        
+                      // Login Button
+                      Obx(
+                            () => Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15),
+                            boxShadow: [
+                              BoxShadow(
+                                color: AppColors.appPrimaryDarkColor.withOpacity(0.3),
+                                blurRadius: 15,
+                                offset: const Offset(0, 8),
+                              ),
+                            ],
+                          ),
+                          child: PrimaryButton(
+                            height: 56,
+                            text: "sign_in".tr,
+                            textSize: 18,
+                            loading: _controller.isLoginLoading.value,
+                            onPressed: _controller.isLoginLoading.value
+                                ? null
+                                : () {
+                              if (_formKey.currentState?.validate() ?? false) {
+                                final body = {
+                                  "mobile": phoneController.text,
+                                  "password": passwordController.text,
+                                };
+                                _controller.login(body);
+                              }
+                            },
+                            color: AppColors.appPrimaryDarkColor,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 20),
                     ],
                   ),
                 ),
-
-                const SizedBox(height: 20),
-
-                // Login Form Card
-                Container(
-                  width: double.infinity,
-                  margin: const EdgeInsets.symmetric(horizontal: 20),
-                  padding: const EdgeInsets.all(30),
-                  decoration: BoxDecoration(
-                    color: AppColors.appWhiteColor,
-                    borderRadius: BorderRadius.circular(25),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.1),
-                        blurRadius: 25,
-                        offset: const Offset(0, 10),
-                      ),
-                    ],
-                    border: Border.all(
-                      color: AppColors.appPrimaryDarkColor.withOpacity(0.1),
-                      width: 1.5,
-                    ),
-                  ),
-                  child: Form(
-                    key: _formKey,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Center(
-                          child: Text(
-                            "login_account".tr,
-                            style: AppTextStyle.medium24.copyWith(
-                              fontFamily: FontFamily.bold,
-                              fontWeight: FontWeight.w700,
-                              color: AppColors.appPrimaryDarkColor,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        Center(
-                          child: Text(
-                            "enter_credentials".tr,
-                            style: AppTextStyle.small14.copyWith(
-                              color: Colors.grey.shade600,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 30),
-
-                        // Contact Field
-                        _buildTextFieldWithIcon(
-                          controller: phoneController,
-                          hintText: "enter_contact".tr,
-                          title: "contact".tr,
-                          icon: Icons.phone,
-                          keyboardType: TextInputType.phone,
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'contact_required'.tr;
-                            }
-                            return null;
-                          },
-                        ),
-                        const SizedBox(height: 20),
-
-                        // Password Field
-                        _buildPasswordField(),
-                        const SizedBox(height: 30),
-
-                        // Login Button
-                        Obx(
-                              () => Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(15),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: AppColors.appPrimaryDarkColor.withOpacity(0.3),
-                                  blurRadius: 15,
-                                  offset: const Offset(0, 8),
-                                ),
-                              ],
-                            ),
-                            child: PrimaryButton(
-                              height: 56,
-                              text: "sign_in".tr,
-                              textSize: 18,
-                              loading: _controller.isLoginLoading.value,
-                              onPressed: _controller.isLoginLoading.value
-                                  ? null
-                                  : () {
-                                if (_formKey.currentState?.validate() ?? false) {
-                                  final body = {
-                                    "mobile": phoneController.text,
-                                    "password": passwordController.text,
-                                  };
-                                  _controller.login(body);
-                                }
-                              },
-                              color: AppColors.appPrimaryDarkColor,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 20),
-                      ],
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 40),
-              ],
-            ),
+              ),
+              const SizedBox(height: 40),
+            ],
           ),
         ),
       ),

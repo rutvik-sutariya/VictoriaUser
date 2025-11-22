@@ -32,9 +32,7 @@ class SettingScreen extends StatelessWidget {
             _buildProfileSection(),
 
             // ✅ Settings List with better spacing and visual hierarchy
-            Expanded(
-              child: _buildSettingsList(context),
-            ),
+            Expanded(child: _buildSettingsList(context)),
           ],
         ),
       ),
@@ -102,10 +100,7 @@ class SettingScreen extends StatelessWidget {
             padding: const EdgeInsets.all(3),
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              border: Border.all(
-                color: AppColors.appWhiteColor,
-                width: 2,
-              ),
+              border: Border.all(color: AppColors.appWhiteColor, width: 2),
             ),
             child: CircleAvatar(
               radius: 28,
@@ -166,7 +161,11 @@ class SettingScreen extends StatelessWidget {
             _buildSettingCard(
               icon: Icons.language_outlined,
               title: 'language'.tr,
-              subtitle: prefs.getString(LocalStorage.language.value)?.capitalizeFirst ?? "Gujarati",
+              subtitle:
+                  prefs
+                      .getString(LocalStorage.language.value)
+                      ?.capitalizeFirst ??
+                  "Gujarati",
               hasNotification: false,
               onTap: () {
                 Get.toNamed(Routes.languagePage);
@@ -187,17 +186,7 @@ class SettingScreen extends StatelessWidget {
 
             // Section Header
             _buildSectionHeader('more'.tr),
-            const SizedBox(height: 12),
 
-            // More Settings
-            _buildSettingCard(
-              icon: Icons.history_outlined,
-              title: 'history'.tr,
-              hasNotification: false,
-              onTap: () {
-                // Get.toNamed(Routes.historyPage);
-              },
-            ),
             const SizedBox(height: 12),
             _buildSettingCard(
               icon: Icons.description_outlined,
@@ -217,7 +206,6 @@ class SettingScreen extends StatelessWidget {
               },
             ),
 
-
             const SizedBox(height: 24),
 
             // Logout Button
@@ -226,9 +214,7 @@ class SettingScreen extends StatelessWidget {
               decoration: BoxDecoration(
                 color: Colors.red.withOpacity(0.1),
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(
-                  color: Colors.red.withOpacity(0.2),
-                ),
+                border: Border.all(color: Colors.red.withOpacity(0.2)),
               ),
               child: _buildSettingCard(
                 icon: Icons.logout_outlined,
@@ -290,9 +276,7 @@ class SettingScreen extends StatelessWidget {
               offset: const Offset(0, 2),
             ),
           ],
-          border: Border.all(
-            color: AppColors.appBgColor.withOpacity(0.5),
-          ),
+          border: Border.all(color: AppColors.appBgColor.withOpacity(0.5)),
         ),
         child: Row(
           children: [
@@ -300,7 +284,9 @@ class SettingScreen extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: (iconColor ?? AppColors.appPrimaryDarkColor).withOpacity(0.1),
+                color: (iconColor ?? AppColors.appPrimaryDarkColor).withOpacity(
+                  0.1,
+                ),
                 shape: BoxShape.circle,
               ),
               child: Icon(
@@ -379,70 +365,114 @@ class SettingScreen extends StatelessWidget {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
+        return Dialog(
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(24),
           ),
-          title: Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: Colors.red.withOpacity(0.1),
-                  shape: BoxShape.circle,
+          elevation: 2,
+          backgroundColor: Colors.white,
+          child: Container(
+            padding: const EdgeInsets.all(24),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Header Section
+                Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: Colors.red.withOpacity(0.1),
+                        shape: BoxShape.circle,
+                      ),
+                      child: Icon(
+                        Icons.logout_rounded,
+                        color: Colors.red,
+                        size: 28,
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: Text(
+                        'logout'.tr,
+                        style: AppTextStyle.medium18.copyWith(
+                          fontWeight: FontWeight.w700,
+                          color: Colors.red,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-                child: Icon(
-                  Icons.logout_outlined,
-                  color: Colors.red,
-                  size: 24,
-                ),
-              ),
-              const SizedBox(width: 12),
-              Text(
-                'logout'.tr,
-                style: AppTextStyle.medium18.copyWith(
-                  fontWeight: FontWeight.w600,
-                  color: Colors.red,
-                ),
-              ),
-            ],
-          ),
-          content: Text(
-            'are_you_sure_you_want_to_logout'.tr,
-            style: AppTextStyle.small14,
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Get.back(),
-              child: Text(
-                'cancel'.tr,
-                style: AppTextStyle.small14.copyWith(
-                  color: Colors.grey,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ),
-            TextButton(
-              onPressed: () {
-                // Perform logout logic here
-                _performLogout();
-              },
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-                decoration: BoxDecoration(
-                  color: Colors.red,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Text(
-                  'logout'.tr,
-                  style: AppTextStyle.small14.copyWith(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w600,
+
+                const SizedBox(height: 20),
+
+                // Content Section
+                Text(
+                  'are_you_sure_you_want_to_logout'.tr,
+                  style: AppTextStyle.small16.copyWith(
+                    color: Colors.grey[700],
+                    height: 1.4,
                   ),
                 ),
-              ),
+
+                const SizedBox(height: 28),
+
+                // Actions Section
+                Row(
+                  children: [
+                    // Cancel Button
+                    Expanded(
+                      child: OutlinedButton(
+                        onPressed: () => Get.back(),
+                        style: OutlinedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(vertical: 14),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          side: BorderSide(color: Colors.grey[300]!),
+                        ),
+                        child: Text(
+                          'cancel'.tr,
+                          style: AppTextStyle.small14.copyWith(
+                            color: Colors.grey[700],
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                    ),
+
+                    const SizedBox(width: 12),
+
+                    // Logout Button
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          _performLogout();
+                        },
+                        style: ElevatedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(vertical: 14),
+                          backgroundColor: Colors.red,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          elevation: 0,
+                          shadowColor: Colors.transparent,
+                        ),
+                        child: Text(
+                          'logout'.tr,
+                          style: AppTextStyle.small14.copyWith(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
             ),
-          ],
+          ),
         );
       },
     );

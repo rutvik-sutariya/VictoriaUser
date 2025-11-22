@@ -20,7 +20,7 @@ final Map<String, String> enUS = {
   "settings": "Settings",
 
   // Login Screen
-  'welcome_back': 'Welcome Back!',
+  'welcome_back': 'Welcome',
   'sign_in_continue': 'Sign in to continue to your account',
   'login_account': 'Login to Your Account',
   'enter_credentials': 'Enter your credentials to continue',
@@ -132,11 +132,12 @@ final Map<String, String> enUS = {
   "order_milk": "Order Milk",
   "cancel_order": "Cancel Order",
   "important_notes": "Important Notes",
+  "reduced_order_note":
+      "Reduced milk orders must be placed before 6:00 PM for the next day delivery. Orders cannot be modified or cancelled once confirmed.",
   "extra_order_note":
-      "For extra milk orders, please place your order at least 3 hours before the delivery time",
+      "Extra milk orders must be placed before 6:00 PM for the next day delivery. Orders cannot be modified or cancelled once confirmed.",
   "cancel_order_note":
-      "To cancel your regular order, please inform us at least 3 hours before the delivery time",
-
+      "Order cancellations must be made before 6:00 PM for the next day delivery. Once cancelled, the order cannot be reinstated.",
   "monday": "Monday",
   "tuesday": "Tuesday",
   "wednesday": "Wednesday",
@@ -182,6 +183,14 @@ final Map<String, String> enUS = {
   "current_month": "Current Month",
   "past_month": "Past Month",
   "future_month": "Future Month",
+  "confirm_upi_payment_done": "Confirm if UPI payment is completed",
+  "whatsapp_message_info": "WhatsApp message will be sent automatically",
+  "send_whatsapp_message": "Send WhatsApp Message",
+  "confirm_payment_first": "Please confirm your payment first",
+  "payment_confirmation": "Payment Confirmation",
+  "payment_done": "Payment Done",
+  "cash_payment_whatsapp_info":
+      "WhatsApp message will be sent after payment confirmation",
 
   // Existing translations
   "no_payment_data": "No Payment Data",
@@ -234,4 +243,44 @@ final Map<String, String> enUS = {
   'cash_payment_failed': 'Failed to process cash payment.',
   'upi_payment_failed': 'Failed to process UPI payment.',
   'something_went_wrong': 'Something went wrong. Please try again.',
+  "status_pending": "Pending",
+  "status_approved": "Approved",
+  "status_rejected": "Rejected",
+  "status_processing": "Processing",
+  "status_completed": "Completed",
+  "status_failed": "Failed",
+  // Reduced Milk Card
+  "order_reduced_milk": "Order Reduced Milk",
+  "select_reduced_quantity": "Select Reduced Quantity",
+
+  // Payment Status
+  'payment_pending': 'Payment Pending',
+  'payment_under_review': 'Your payment is under review and awaiting approval',
+  'admin_approval_pending':
+      'Waiting for admin approval. This may take 24-48 hours.',
+  'payment_approved': 'Payment Approved',
+  'payment_successfully_approved':
+      'Your payment has been successfully approved and processed',
+  'amount_paid': 'Amount Paid',
+  'payment_date': 'Payment Date',
+  'payment_rejected': 'Payment Rejected',
+  'payment_rejected_by_admin': 'Your payment was rejected by the administrator',
+  'try_again_payment': 'Try Payment Again',
+  'contact_support': 'Contact Support',
+  'support_contact_info': 'Please contact support for more information',
+  'payment_status': 'Payment Status',
+  'confirm_payment': 'Confirm Payment',
+
+  // Status
+  'confirmed': 'Confirmed',
+  'approved': 'Approved',
+  'rejected': 'Rejected',
+
+  // Actions
+  'confirm': 'Confirm',
+  'try_again': 'Try Again',
+
+  // Messages
+  'will_be_sent': 'Will be sent',
+  'whatsapp_message': 'WhatsApp Message',
 };

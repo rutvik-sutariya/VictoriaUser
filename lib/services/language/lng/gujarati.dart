@@ -18,7 +18,7 @@ final Map<String, String> guIN = {
   "settings": "સેટિંગ્સ",
 
   // Login Screen
-  'welcome_back': 'ફરી સ્વાગત છે!',
+  'welcome_back': 'સ્વાગત છે',
   'sign_in_continue': 'તમારા ખાતામાં ચાલુ રાખવા માટે સાઇન ઇન કરો',
   'login_account': 'તમારા ખાતામાં લોગિન કરો',
   'enter_credentials': 'ચાલુ રાખવા માટે તમારી માહિતી દાખલ કરો',
@@ -41,7 +41,8 @@ final Map<String, String> guIN = {
   "support_hours": "સપોર્ટ સમય",
   "24_hours_7_days": "24 કલાક, અઠવાડિયાના 7 દિવસ",
   "call_customer_care": "ગ્રાહક સેવાને કૉલ કરો",
-  "call_confirmation_message": "શું તમે ખરેખર અમારી ગ્રાહક સેવા ટીમને કૉલ કરવા માંગો છો?",
+  "call_confirmation_message":
+      "શું તમે ખરેખર અમારી ગ્રાહક સેવા ટીમને કૉલ કરવા માંગો છો?",
   "cancel": "રદ કરો",
   "call": "કૉલ કરો",
 
@@ -78,7 +79,8 @@ final Map<String, String> guIN = {
   'duties_point3': 'રજા અથવા સ્કિપ માટે જાણ કરો.',
 
   'privacy_title': '૭. પ્રાઈવસી',
-  'privacy_point1': 'તમારા ડેટા સુરક્ષિત છે અને ક્યારેય તૃતીય પક્ષ સાથે શેર કરવામાં આવશે નહીં.',
+  'privacy_point1':
+      'તમારા ડેટા સુરક્ષિત છે અને ક્યારેય તૃતીય પક્ષ સાથે શેર કરવામાં આવશે નહીં.',
 
   // Language Screen
   "language": "ભાષા",
@@ -129,8 +131,12 @@ final Map<String, String> guIN = {
   "order_milk": "દૂધ ઓર્ડર કરો",
   "cancel_order": "ઓર્ડર રદ કરો",
   "important_notes": "મહત્વપૂર્ણ નોંધો",
-  "extra_order_note": "અતિરિક્ત દૂધના ઓર્ડર માટે, કૃપા કરીને ડિલિવરી સમયથી ઓછામાં ઓછા 3 કલાક પહેલા તમારો ઓર્ડર મૂકો",
-  "cancel_order_note": "તમારો નિયમિત ઓર્ડર રદ કરવા માટે, કૃપા કરીને ડિલિવરી સમયથી ઓછામાં ઓછા 3 કલાક પહેલા અમને જણાવો",
+  "reduced_order_note":
+      "ઘટાડવા વાળું દૂધનો ઓર્ડર આગામી દિવસની ડિલિવરી માટે સાંજે 6:00 વાગ્યા પહેલા મૂકવો જરૂરી છે. ઓર્ડર કન્ફર્મ થયા પછી સંશોધિત અથવા રદ્દ કરી શકાશે નહીં.",
+  "extra_order_note":
+      "વધારાના દૂધનો ઓર્ડર આગામી દિવસની ડિલિવરી માટે સાંજે 6:00 વાગ્યા પહેલા મૂકવો જરૂરી છે. ઓર્ડર કન્ફર્મ થયા પછી સંશોધિત અથવા રદ્દ કરી શકાશે નહીં.",
+  "cancel_order_note":
+      "ઓર્ડર રદ્દ કરવા આગામી દિવસની ડિલિવરી માટે સાંજે 6:00 વાગ્યા પહેલા કરવું જરૂરી છે. એકવાર રદ્દ થયા પછી, ઓર્ડર ફરીથી સક્રિય કરી શકાશે નહીં.",
   "monday": "સોમવાર",
   "tuesday": "મંગળવાર",
   "wednesday": "બુધવાર",
@@ -176,6 +182,15 @@ final Map<String, String> guIN = {
   "current_month": "વર્તમાન મહિનો",
   "past_month": "ભૂતકાળનો મહિનો",
   "future_month": "ભવિષ્યનો મહિનો",
+  "confirm_upi_payment_done": "ખાતરી કરો કે UPI પેમેન્ટ પૂર્ણ થઈ ગઈ છે",
+  "whatsapp_message_info": "વોટ્સએપ મેસેજ આપમેળે મોકલવામાં આવશે",
+  "send_whatsapp_message": "વોટ્સએપ મેસેજ મોકલો",
+  "confirm_payment_first": "કૃપા કરીને પહેલા તમારી પેમેન્ટ કન્ફર્મ કરો",
+  "payment_confirmation": "પેમેન્ટ કન્ફર્મેશન",
+  "payment_done": "પેમેન્ટ થઈ ગઈ",
+  "cash_payment_whatsapp_info":
+      "પેમેન્ટ કન્ફર્મેશન પછી વોટ્સએપ મેસેજ મોકલવામાં આવશે",
+
   // Existing translations
   "no_payment_data": "કોઈ ચુકવણી ડેટા નથી",
   "no_data_for_selected_month": "પસંદ કરેલ મહિનાનો કોઈ ડેટા ઉપલબ્ધ નથી",
@@ -192,18 +207,21 @@ final Map<String, String> guIN = {
   "failed_to_pick_image": "ચિત્ર પસંદ કરવામાં નિષ્ફળ",
   "failed_to_take_photo": "ફોટો લેવામાં નિષ્ફળ",
   "uploading_image": "ચિત્ર અપલોડ થાય છે...",
-  "tap_to_select_from_gallery": "ગેલેરી અથવા કેમેરામાંથી પસંદ કરવા માટે ટેપ કરો",
+  "tap_to_select_from_gallery":
+      "ગેલેરી અથવા કેમેરામાંથી પસંદ કરવા માટે ટેપ કરો",
   "view_image": "ચિત્ર જુઓ",
   "tap_to_view": "જોવા માટે ટેપ કરો",
   "upload_upi_screenshot": "યુપીઆઈ સ્ક્રીનશોટ અપલોડ કરો",
-  "upload_upi_payment_screenshot": "કૃપા કરીને તમારી યુપીઆઈ ચુકવણીનો સ્ક્રીનશોટ અપલોડ કરો",
+  "upload_upi_payment_screenshot":
+      "કૃપા કરીને તમારી યુપીઆઈ ચુકવણીનો સ્ક્રીનશોટ અપલોડ કરો",
   "tap_to_upload_screenshot": "સ્ક્રીનશોટ અપલોડ કરવા માટે ટેપ કરો",
   "upload_screenshot": "સ્ક્રીનશોટ અપલોડ કરો",
   "screenshot_uploaded": "સ્ક્રીનશોટ અપલોડ થયો",
   "image_ready_for_submission": "સબમિશન માટે ચિત્ર તૈયાર છે",
   "select_person": "વ્યક્તિ પસંદ કરો",
   "select_who_received_payment": "ચુકવણી કોને મળી તે પસંદ કરો",
-  "please_upload_upi_screenshot": "કૃપા કરીને પહેલા યુપીઆઈ સ્ક્રીનશોટ અપલોડ કરો",
+  "please_upload_upi_screenshot":
+      "કૃપા કરીને પહેલા યુપીઆઈ સ્ક્રીનશોટ અપલોડ કરો",
   "please_select_person": "કૃપા કરીને પહેલા વ્યક્તિ પસંદ કરો",
   "submit_payment": "ચુકવણી સબમિટ કરો",
   "cash_payment_recorded": "નগદ ચુકવણી રેકોર્ડ થઈ",
@@ -225,4 +243,49 @@ final Map<String, String> guIN = {
   'upi_payment_submitted': 'UPI ચુકવણી સફળતાપૂર્વક સબમિટ થઈ.',
   'upi_payment_failed': 'UPI ચુકવણી પ્રક્રિયા નિષ્ફળ ગઈ.',
   'something_went_wrong': 'કંઈક ખોટું થયું. કૃપા કરીને ફરી પ્રયાસ કરો.',
+  "status_pending": "બાકી",
+  "status_approved": "મંજૂર",
+  "status_rejected": "નકારવામાં આવી",
+  "status_processing": "પ્રક્રિયા ચાલુ",
+  "status_completed": "પૂર્ણ",
+  "status_failed": "નિષ્ફળ",
+
+  // Reduced Milk Card
+  "order_reduced_milk": "ઓછું દૂધ ઓર્ડર કરો",
+  "select_reduced_quantity": "રિડ્યુસ ક્વોન્ટિટી પસંદઓછી માત્રા પસંદ કરો",
+
+  // Payment Status
+  'payment_pending': 'ચુકવણી',
+  'payment_under_review':
+      'તમારી ચુકવણી સમીક્ષા હેઠળ છે અને મંજૂરીની રાહ જોઈ રહ્યું છે',
+  'admin_approval_pending':
+      'એડમિનની મંજૂરીની રાહ જોઈ રહ્યા છીએ. આ 24-48 કલાક લઈ શકે છે.',
+  'payment_approved': 'ચુકવણી મંજૂર થઈ',
+  'payment_successfully_approved':
+      'તમારી ચુકવણી સફળતાપૂર્વક મંજૂર થઈ અને પ્રક્રિયા થઈ ગઈ છે',
+  'amount_paid': 'ચૂકવેલ રકમ',
+  'payment_date': 'ચુકવણી તારીખ',
+  'payment_rejected': 'ચુકવણી નકારવામાં આવી',
+  'payment_rejected_by_admin':
+      'તમારી ચુકવણી એડમિનિસ્ટ્રેટર દ્વારા નકારવામાં આવી છે',
+  'try_again_payment': 'ફરીથી ચુકવણી કરો',
+  'contact_support': 'સહાયતા સંપર્ક કરો',
+  'support_contact_info': 'વધુ માહિતી માટે કૃપા કરીને સહાયતા સંપર્ક કરો',
+
+  // Common Payment Terms
+  'payment_status': 'ચુકવણી સ્થિતિ',
+  'confirm_payment': 'ચુકવણી પુષ્ટિ કરો',
+
+  // Status
+  'confirmed': 'પુષ્ટિ થઈ',
+  'approved': 'મંજૂર',
+  'rejected': 'નકારવામાં આવી',
+
+  // Actions
+  'confirm': 'પુષ્ટિ કરો',
+  'try_again': 'ફરી પ્રયત્ન કરો',
+
+  // Messages
+  'will_be_sent': 'મોકલવામાં આવશે',
+  'whatsapp_message': 'વોટ્સએપ સંદેશ',
 };

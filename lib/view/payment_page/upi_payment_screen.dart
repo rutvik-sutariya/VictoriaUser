@@ -1,9 +1,7 @@
 // upi_payment_screen.dart
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 import '../../utils/app_colors.dart';
 import '../../utils/text_styles.dart';
 
@@ -13,148 +11,168 @@ class UpiPaymentScreen extends StatefulWidget {
   final String year;
 
   const UpiPaymentScreen({
-    Key? key,
+    super.key,
     required this.amount,
     required this.month,
     required this.year,
-  }) : super(key: key);
+  });
 
   @override
   State<UpiPaymentScreen> createState() => _UpiPaymentScreenState();
 }
 
 class _UpiPaymentScreenState extends State<UpiPaymentScreen> {
-  String upiId = "your-merchant@upi"; // Replace with your actual UPI ID
+  String upiId = "7859828561-2@axl";
   List<UpiApp> availableUpiApps = [];
-  bool isLoading = true;
+  bool isLoading = false;
 
-  // List of popular UPI apps with their package names and UPI schemes
+  // List of popular UPI apps with CORRECT URLs
   final List<UpiApp> allUpiApps = [
     UpiApp(
       name: "PhonePe",
       package: "com.phonepe.app",
       scheme: "phonepe://",
       icon: Icons.phone_android,
-      upiPrefix: "phonepe",
     ),
     UpiApp(
       name: "Google Pay",
       package: "com.google.android.apps.nbu.paisa.user",
-      scheme: "tez://",
+      scheme: "gpay://",
       icon: Icons.account_balance_wallet,
-      upiPrefix: "gpay",
     ),
     UpiApp(
       name: "Paytm",
       package: "net.one97.paytm",
       scheme: "paytmmp://",
       icon: Icons.payment,
-      upiPrefix: "paytm",
     ),
     UpiApp(
       name: "BHIM UPI",
       package: "in.org.npci.upiapp",
       scheme: "bhim://",
       icon: Icons.mobile_friendly,
-      upiPrefix: "bhim",
-    ),
-    UpiApp(
-      name: "Amazon Pay",
-      package: "in.amazon.mShop.android.shopping",
-      scheme: "amazon://",
-      icon: Icons.shopping_bag,
-      upiPrefix: "amazon",
     ),
     UpiApp(
       name: "Any UPI App",
       package: "generic.upi",
       scheme: "upi://",
-      icon: Icons.payment,
-      upiPrefix: "upi",
+      icon: Icons.apps,
     ),
   ];
 
   @override
   void initState() {
     super.initState();
-    _checkAvailableUpiApps();
+    availableUpiApps = allUpiApps;
   }
 
-  // Generate UPI URL for direct payment
+  /// ✅ Generate UPI payment URL (Standard UPI Format)
   String get upiUrl {
     return "upi://pay?pa=$upiId&pn=Milk%20Vendor&am=${widget.amount}&cu=INR&tn=Payment%20for%20${_getMonthName(widget.month)}%20${widget.year}";
   }
 
-  // Check which UPI apps are installed on the device
-  Future<void> _checkAvailableUpiApps() async {
-    List<UpiApp> availableApps = [];
-
-    for (var app in allUpiApps) {
-      try {
-        // Try to launch the app scheme to check if it's available
-        String testUrl = "${app.scheme}test";
-        bool canLaunchApp = await canLaunch(testUrl);
-
-        if (canLaunchApp || app.name == "Any UPI App") {
-          availableApps.add(app);
-        }
-      } catch (e) {
-        print("Error checking app ${app.name}: $e");
-      }
-    }
-
-    // Always add generic UPI option
-    if (!availableApps.any((app) => app.name == "Any UPI App")) {
-      availableApps.add(
-        UpiApp(
-          name: "Any UPI App",
-          package: "generic.upi",
-          scheme: "upi://",
-          icon: Icons.payment,
-          upiPrefix: "upi",
-        ),
-      );
-    }
-
-    setState(() {
-      availableUpiApps = availableApps;
-      isLoading = false;
-    });
-  }
-
-  // Launch specific UPI app with payment details
-  Future<void> _launchUpiApp(UpiApp app) async {
+  /// ✅ CORRECT METHOD: Launch UPI app with proper URL
+  Future<void> _launchUpiApp(UpiApp upiApp) async {
     try {
-      String launchUrl = "upi://pay?pa=$upiId&pn=Milk%20Vendor&am=${widget.amount}&cu=INR&tn=Payment%20for%20${_getMonthName(widget.month)}%20${widget.year}";
+      String url = upiUrl;
 
-      print("Launching URL: $launchUrl");
+      // For specific apps, use their custom scheme but same parameters
+      if (upiApp.name != "Any UPI App") {
+        // Replace upi:// with app specific scheme
+        url = url.replaceFirst("upi://", "${upiApp.scheme}pay/");
+      }
 
-      if (await canLaunch(launchUrl)) {
-        await launch(launchUrl);
+      print("Trying to launch: $url"); // Debug
+
+      final Uri uri = Uri.parse(url);
+
+      bool launched = await launchUrl(
+        uri,
+        mode: LaunchMode.externalApplication,
+      );
+
+      if (launched) {
+        _showPaymentInitiatedDialog(upiApp.name);
       } else {
-        _showErrorDialog();
+        // If specific app fails, try generic UPI
+        await _launchGenericUpi();
       }
     } catch (e) {
-      print("Error launching app: $e");
-      _showErrorDialog();
+      print("Error: $e");
+      // Fallback to generic UPI
+      await _launchGenericUpi();
     }
   }
 
-  void _showErrorDialog() {
+  /// Launch generic UPI as fallback
+  Future<void> _launchGenericUpi() async {
+    try {
+      final Uri uri = Uri.parse(upiUrl);
+      bool launched = await launchUrl(
+        uri,
+        mode: LaunchMode.externalApplication,
+      );
+
+      if (launched) {
+        _showPaymentInitiatedDialog("UPI App");
+      } else {
+        _showErrorSnackbar("No UPI app found. Please install PhonePe, Google Pay, etc.");
+      }
+    } catch (e) {
+      _showErrorSnackbar("Please use QR code for payment.");
+    }
+  }
+
+  /// Alternative: Direct UPI Intent (Most Reliable)
+  Future<void> _launchUpiIntent() async {
+    try {
+      // This is the most reliable UPI URL format
+      String url = "upi://pay?pa=$upiId&pn=Milk%20Vendor&am=${widget.amount}&cu=INR";
+
+      final Uri uri = Uri.parse(url);
+      bool launched = await launchUrl(
+        uri,
+        mode: LaunchMode.externalApplication,
+      );
+
+      if (!launched) {
+        _showErrorSnackbar("No UPI app found. Please install a UPI app.");
+      }
+    } catch (e) {
+      _showErrorSnackbar("Payment failed. Please use QR code.");
+    }
+  }
+
+  /// Show error message
+  void _showErrorSnackbar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: Colors.red,
+        behavior: SnackBarBehavior.floating,
+        duration: Duration(seconds: 4),
+      ),
+    );
+  }
+
+  /// Show success dialog when payment is initiated
+  void _showPaymentInitiatedDialog(String appName) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text("Payment Error"),
-        content: Text("Unable to open UPI app. Please make sure you have a UPI app installed."),
+        title: Text("Payment Initiated", style: TextStyle(color: AppColors.appPrimaryDarkColor)),
+        content: Text("$appName has been opened. Please complete the payment."),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text("OK"),
+            child: Text("OK", style: TextStyle(color: AppColors.appPrimaryDarkColor)),
           ),
         ],
       ),
     );
   }
+
+  // ================= UI PART =================
 
   @override
   Widget build(BuildContext context) {
@@ -179,20 +197,15 @@ class _UpiPaymentScreenState extends State<UpiPaymentScreen> {
         padding: const EdgeInsets.all(20),
         child: Column(
           children: [
-            // Amount Display
             _buildAmountCard(),
             const SizedBox(height: 30),
-
-            // QR Code Section
             _buildQrCodeSection(),
             const SizedBox(height: 30),
-
-            // OR Divider
             _buildOrDivider(),
             const SizedBox(height: 30),
-
-            // UPI Apps List
             _buildUpiAppsSection(),
+            const SizedBox(height: 20),
+            _buildDirectUpiButton(), // Added direct UPI button
           ],
         ),
       ),
@@ -204,8 +217,6 @@ class _UpiPaymentScreenState extends State<UpiPaymentScreen> {
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
           colors: [
             AppColors.appPrimaryDarkColor.withOpacity(0.9),
             AppColors.appPrimaryDarkColor,
@@ -224,9 +235,8 @@ class _UpiPaymentScreenState extends State<UpiPaymentScreen> {
         children: [
           Text(
             "Payable Amount",
-            style: AppTextStyle.small16.copyWith(
-              color: Colors.white.withOpacity(0.9),
-            ),
+            style:
+            AppTextStyle.small16.copyWith(color: Colors.white.withOpacity(0.9)),
           ),
           const SizedBox(height: 8),
           Text(
@@ -239,9 +249,8 @@ class _UpiPaymentScreenState extends State<UpiPaymentScreen> {
           const SizedBox(height: 8),
           Text(
             "For ${_getMonthName(widget.month)} ${widget.year}",
-            style: AppTextStyle.small14.copyWith(
-              color: Colors.white.withOpacity(0.8),
-            ),
+            style:
+            AppTextStyle.small14.copyWith(color: Colors.white.withOpacity(0.8)),
           ),
         ],
       ),
@@ -289,9 +298,8 @@ class _UpiPaymentScreenState extends State<UpiPaymentScreen> {
           const SizedBox(height: 16),
           Text(
             "Scan this QR code with any UPI app",
-            style: AppTextStyle.small14.copyWith(
-              color: Colors.grey.shade600,
-            ),
+            style:
+            AppTextStyle.small14.copyWith(color: Colors.grey.shade600),
             textAlign: TextAlign.center,
           ),
         ],
@@ -302,12 +310,7 @@ class _UpiPaymentScreenState extends State<UpiPaymentScreen> {
   Widget _buildOrDivider() {
     return Row(
       children: [
-        Expanded(
-          child: Divider(
-            color: Colors.grey.shade400,
-            thickness: 1,
-          ),
-        ),
+        Expanded(child: Divider(color: Colors.grey.shade400, thickness: 1)),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Text(
@@ -318,12 +321,7 @@ class _UpiPaymentScreenState extends State<UpiPaymentScreen> {
             ),
           ),
         ),
-        Expanded(
-          child: Divider(
-            color: Colors.grey.shade400,
-            thickness: 1,
-          ),
-        ),
+        Expanded(child: Divider(color: Colors.grey.shade400, thickness: 1)),
       ],
     );
   }
@@ -355,120 +353,152 @@ class _UpiPaymentScreenState extends State<UpiPaymentScreen> {
           const SizedBox(height: 8),
           Text(
             "Tap on your preferred UPI app to pay instantly",
-            style: AppTextStyle.small14.copyWith(
-              color: Colors.grey.shade600,
-            ),
+            style:
+            AppTextStyle.small14.copyWith(color: Colors.grey.shade600),
           ),
           const SizedBox(height: 20),
-
-          if (isLoading)
-            _buildLoadingIndicator()
-          else
-            _buildUpiAppsList(),
+          _buildUpiAppsGrid(),
         ],
       ),
     );
   }
 
-  Widget _buildLoadingIndicator() {
-    return Container(
-      padding: const EdgeInsets.all(40),
-      child: Column(
-        children: [
-          CircularProgressIndicator(
-            valueColor: AlwaysStoppedAnimation<Color>(AppColors.appPrimaryDarkColor),
-          ),
-          const SizedBox(height: 16),
-          Text(
-            "Loading payment options...",
-            style: AppTextStyle.small14.copyWith(
-              color: Colors.grey.shade600,
+  Widget _buildUpiAppsGrid() {
+    return GridView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 3,
+        crossAxisSpacing: 16,
+        mainAxisSpacing: 16,
+        childAspectRatio: 0.9,
+      ),
+      itemCount: availableUpiApps.length,
+      itemBuilder: (context, index) {
+        final upiApp = availableUpiApps[index];
+        return _buildUpiAppCard(upiApp);
+      },
+    );
+  }
+
+  Widget _buildUpiAppCard(UpiApp upiApp) {
+    return GestureDetector(
+      onTap: () => _launchUpiApp(upiApp),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: Colors.grey.shade300),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.05),
+              blurRadius: 8,
+              offset: const Offset(0, 2),
             ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildUpiAppsList() {
-    return Column(
-      children: availableUpiApps.map((app) => _buildUpiAppTile(app)).toList(),
-    );
-  }
-
-  Widget _buildUpiAppTile(UpiApp app) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      decoration: BoxDecoration(
-        color: AppColors.appBgColor,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.grey.shade300),
-      ),
-      child: ListTile(
-        leading: Container(
-          padding: const EdgeInsets.all(8),
-          decoration: BoxDecoration(
-            color: AppColors.appPrimaryDarkColor.withOpacity(0.1),
-            shape: BoxShape.circle,
-          ),
-          child: Icon(app.icon, color: AppColors.appPrimaryDarkColor, size: 24),
+          ],
         ),
-        title: Text(
-          app.name,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              width: 50,
+              height: 50,
+              decoration: BoxDecoration(
+                color: AppColors.appPrimaryDarkColor.withOpacity(0.1),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(
+                upiApp.icon,
+                size: 28,
+                color: AppColors.appPrimaryDarkColor,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              upiApp.name,
+              style: AppTextStyle.small12.copyWith(
+                fontWeight: FontWeight.w500,
+                color: Colors.grey.shade800,
+              ),
+              textAlign: TextAlign.center,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
+            const SizedBox(height: 4),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+              decoration: BoxDecoration(
+                color: AppColors.appPrimaryDarkColor.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Text(
+                "Pay",
+                style: AppTextStyle.small12.copyWith(
+                  color: AppColors.appPrimaryDarkColor,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // NEW: Direct UPI Payment Button (Most Reliable)
+  Widget _buildDirectUpiButton() {
+    return Container(
+      width: double.infinity,
+      child: ElevatedButton(
+        onPressed: _launchUpiIntent,
+        style: ElevatedButton.styleFrom(
+          backgroundColor: AppColors.appPrimaryDarkColor,
+          padding: EdgeInsets.symmetric(vertical: 16),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+        ),
+        child: Text(
+          "Pay with Any UPI App",
           style: AppTextStyle.small16.copyWith(
+            color: Colors.white,
             fontWeight: FontWeight.w600,
           ),
         ),
-        subtitle: Text(
-          "Pay ₹${widget.amount}",
-          style: AppTextStyle.small14.copyWith(
-            color: Colors.green.shade600,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-        trailing: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Colors.green, Colors.green.shade700],
-            ),
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: Text(
-            "PAY",
-            style: AppTextStyle.small12.copyWith(
-              color: Colors.white,
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-        ),
-        onTap: () => _launchUpiApp(app),
       ),
     );
   }
 
   String _getMonthName(String monthNumber) {
     final months = {
-      "1": "January", "2": "February", "3": "March", "4": "April",
-      "5": "May", "6": "June", "7": "July", "8": "August",
-      "9": "September", "10": "October", "11": "November", "12": "December"
+      "1": "January",
+      "2": "February",
+      "3": "March",
+      "4": "April",
+      "5": "May",
+      "6": "June",
+      "7": "July",
+      "8": "August",
+      "9": "September",
+      "10": "October",
+      "11": "November",
+      "12": "December"
     };
     return months[monthNumber] ?? "Month";
   }
 }
 
+/// Model for UPI app
 class UpiApp {
   final String name;
   final String package;
   final String scheme;
   final IconData icon;
-  final String upiPrefix;
 
   UpiApp({
     required this.name,
     required this.package,
     required this.scheme,
     required this.icon,
-    required this.upiPrefix,
   });
 }

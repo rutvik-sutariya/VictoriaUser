@@ -1,6 +1,5 @@
 class Config {
-  // static String baseUrl = 'https://f736448013bf.ngrok-free.app';
-  static String baseUrl = 'https://victoriafarm.onrender.com';
+  static String baseUrl = 'http://147.93.108.251';
 
   static String uploadImage = '/api/upload-image';
 
@@ -14,4 +13,6 @@ class Config {
   static String pendingMonth = '/api/get-pending-month';
   static String cashPayment = '/api/milk/send-cash-payment-request';
   static String upiPayment = '/api/milk/send-online-payment-request';
+  static String notification = '/api/milk/get-milk-notification?userId=';
+
 }

@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:victoria_user/utils/app_colors.dart';
-
+import 'package:flutter/material.dart';
 
 
 void showSnackBar(String message,) {
@@ -30,3 +31,32 @@ String convertToMinuteFormat(String timeString) {
 
   return totalMinutes.toStringAsFixed(1)+" min";
 }
+
+Future<void> sendWhatsAppMessage(String whatsappLink) async {
+  final uri = Uri.parse(whatsappLink);
+
+  try {
+    bool launched = await launchUrl(
+      uri,
+      mode: LaunchMode.externalApplication,
+    );
+
+    if (!launched) {
+      Get.snackbar(
+        "error".tr,
+        "whatsapp_not_installed".tr,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+    }
+  } catch (e) {
+    Get.snackbar(
+      "error".tr,
+      "failed_to_open_whatsapp".tr,
+      backgroundColor: Colors.red,
+      colorText: Colors.white,
+    );
+    print("WhatsApp error: $e");
+  }
+}
+

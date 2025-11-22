@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:victoria_user/global_variable.dart';
+import 'package:victoria_user/model/notification_model.dart';
 import 'package:victoria_user/model/payment_summary_model.dart';
 import '../helper/routes_helper.dart';
 import '../main.dart';
@@ -24,6 +26,8 @@ class ApiController extends GetxController {
   final RxBool isCashPaymentLoading = false.obs;
   final RxBool isUpiPaymentLoading = false.obs;
   final RxBool isImageUploadLoading = false.obs;
+  final RxBool isReducedMilkLoading = false.obs;
+  final RxBool isNotificationLoading = false.obs;
 
   final RxString imageUrl = "".obs;
 
@@ -31,6 +35,7 @@ class ApiController extends GetxController {
   final Rx<UserModel> userDetails = UserModel().obs;
   final Rx<MilkHistoryModel> milkHistoryDetails = MilkHistoryModel().obs;
   final Rx<PaymentSummaryModel> paymentDetails = PaymentSummaryModel().obs;
+  final Rx<NotificationModel> notificationDetails = NotificationModel().obs;
 
   // Login Api
   Future<void> login(body) async {
@@ -236,6 +241,48 @@ class ApiController extends GetxController {
   }
 
   // Extra Milk
+  Future<void> reducedMilk(body) async {
+    isReducedMilkLoading.value = true;
+    try {
+      final response = await ApiManager.instance.post(
+        endpoint:
+            "${Config.extraOrder}${Constant.userId.value}/lessmilk-request",
+        headers: true,
+        body: body,
+      );
+      final jsonData = jsonDecode(response.body);
+
+      if (response.statusCode == 200) {
+        Get.snackbar(
+          "Success",
+          "Reduced milk added successfully",
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.green,
+          colorText: Colors.white,
+        );
+      } else {
+        Get.snackbar(
+          "Failed",
+          jsonData["message"] ?? "Failed to add reduced milk",
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+        );
+      }
+    } catch (e) {
+      Get.snackbar(
+        "Error",
+        e.toString(),
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+    } finally {
+      isReducedMilkLoading.value = false;
+    }
+  }
+
+  // Extra Milk
   Future<void> paymentSummery(body) async {
     isSummeryLoading.value = true;
     try {
@@ -315,8 +362,43 @@ class ApiController extends GetxController {
     }
   }
 
+  // Notification
+  Future<void> notification() async {
+    isNotificationLoading.value = true;
+    try {
+      final response = await ApiManager.instance.post(
+        endpoint: Config.notification + Constant.userId.value,
+        headers: true,
+        body: {},
+      );
+      final jsonData = jsonDecode(response.body);
+      print("Notification :: ${response.body}");
+      if (response.statusCode == 200) {
+        notificationDetails(notificationModelFromJson(response.body));
+      } else {
+        Get.snackbar(
+          "Failed",
+          jsonData["message"] ?? "Unable to order",
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+        );
+      }
+    } catch (e) {
+      Get.snackbar(
+        "Error",
+        e.toString(),
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+    } finally {
+      isNotificationLoading.value = false;
+    }
+  }
+
   // Cash Payment
-  Future<void> processCashPayment(body) async {
+  Future<void> processCashPayment(body, whatsappNumber, messages) async {
     isCashPaymentLoading.value = true;
     try {
       final response = await ApiManager.instance.post(
@@ -328,13 +410,25 @@ class ApiController extends GetxController {
       final jsonData = jsonDecode(response.body);
       print("Cash Payment :: $jsonData :: ${response.statusCode}");
 
-      if (response.statusCode == 200 && jsonData["success"] == true) {
+      if (response.statusCode == 200) {
         Get.snackbar(
           "success".tr,
           "cash_payment_recorded".tr,
           backgroundColor: Colors.green,
           colorText: Colors.white,
         );
+        final whatsappLink = jsonData["whatsappLink"];
+
+        if (whatsappLink != null && whatsappLink.toString().isNotEmpty) {
+          sendWhatsAppMessage(whatsappLink);
+        } else {
+          Get.snackbar(
+            "error".tr,
+            "whatsapp_link_not_found".tr,
+            backgroundColor: Colors.red,
+            colorText: Colors.white,
+          );
+        }
       } else {
         Get.snackbar(
           "failed".tr,
@@ -358,7 +452,7 @@ class ApiController extends GetxController {
   }
 
   // UPI Payment
-  Future<void> processUpiPayment(body) async {
+  Future<void> processUpiPayment(body, whatsappNumber, messages) async {
     isUpiPaymentLoading.value = true;
     try {
       final response = await ApiManager.instance.post(
@@ -370,7 +464,20 @@ class ApiController extends GetxController {
       final jsonData = jsonDecode(response.body);
       print("UPI Payment :: $jsonData");
 
-      if (response.statusCode == 200 && jsonData["success"] == true) {
+      if (jsonData["success"] == true) {
+        final whatsappLink = jsonData["whatsappLink"];
+
+        if (whatsappLink != null && whatsappLink.toString().isNotEmpty) {
+          sendWhatsAppMessage(whatsappLink);
+        } else {
+          Get.snackbar(
+            "error".tr,
+            "whatsapp_link_not_found".tr,
+            backgroundColor: Colors.red,
+            colorText: Colors.white,
+          );
+        }
+
         Get.snackbar(
           "success".tr,
           "upi_payment_submitted".tr,
@@ -398,7 +505,6 @@ class ApiController extends GetxController {
       isUpiPaymentLoading.value = false;
     }
   }
-
 
   /// Upload Image (only image files allowed)
   Future<void> uploadImage(File imageFile) async {
@@ -433,5 +539,4 @@ class ApiController extends GetxController {
       isImageUploadLoading.value = false; // Hide loader
     }
   }
-
 }
