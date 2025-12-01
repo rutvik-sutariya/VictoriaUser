@@ -14,6 +14,8 @@ import '../services/api_service/api_manager.dart';
 import '../services/api_service/config.dart';
 import '../services/constants.dart';
 import '../services/local_storage/local_storage.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:open_file/open_file.dart';
 
 class ApiController extends GetxController {
   final RxBool isLoginLoading = false.obs;
@@ -28,7 +30,7 @@ class ApiController extends GetxController {
   final RxBool isImageUploadLoading = false.obs;
   final RxBool isReducedMilkLoading = false.obs;
   final RxBool isNotificationLoading = false.obs;
-
+  final RxBool isExportLoading = false.obs;
   final RxString imageUrl = "".obs;
 
   final RxList<String> employeeList = <String>[].obs;
@@ -394,6 +396,45 @@ class ApiController extends GetxController {
       );
     } finally {
       isNotificationLoading.value = false;
+    }
+  }
+
+  // Milk History
+  Future<void> milkPdfExport(body) async {
+    isExportLoading.value = true;
+    try {
+      final url = Uri.parse(Config.baseUrl + Config.milkExportPdf);
+      print("Url :: $url");
+      final response = await http.post(
+        url,
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/pdf",
+        },
+        body: jsonEncode(body), // <-- FIX here
+      );
+      print("Milk Pdf Export :: ${response.body}");
+      if (response.statusCode == 200) {
+        final dir = await getApplicationDocumentsDirectory();
+        final file = File("${dir.path}/Victoria Milk.pdf");
+
+        await file.writeAsBytes(response.bodyBytes);
+
+        await OpenFile.open(file.path); // open with default PDF viewer
+      } else {
+        debugPrint("Failed: ${response.statusCode} ${response.reasonPhrase}");
+      }
+
+    } catch (e) {
+      Get.snackbar(
+        "Error",
+        e.toString(),
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+    } finally {
+      isExportLoading.value = false;
     }
   }
 

@@ -28,9 +28,10 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
       backgroundColor: AppColors.appBgColor,
       appBar: AppBar(
         backgroundColor: AppColors.appBgColor,
-        leading: const CustomBack(),
+        leading: const CustomBack(
+        ),
         title: Text(
-          "Notifications",
+          "notifications".tr,
           style: AppTextStyle.medium24.copyWith(
             fontFamily: FontFamily.semiBold,
             fontWeight: FontWeight.w600,
@@ -73,7 +74,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
           ),
           const SizedBox(height: 24),
           Text(
-            "No Notifications",
+            "no_notifications_title".tr,
             style: AppTextStyle.medium20.copyWith(
               fontWeight: FontWeight.w600,
               color: AppColors.appPrimaryDarkColor,
@@ -81,8 +82,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
           ),
           const SizedBox(height: 12),
           Text(
-            "You don't have any notifications yet.\nWe'll notify you when something arrives.",
-            textAlign: TextAlign.center,
+            "no_notifications_message".tr,            textAlign: TextAlign.center,
             style: AppTextStyle.small14.copyWith(
               color: Colors.grey.shade600,
               height: 1.5,

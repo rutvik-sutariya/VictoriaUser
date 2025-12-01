@@ -14,7 +14,7 @@ class CustomBack extends StatelessWidget {
     return InkWell(
         splashColor: AppColors.appPrimaryDarkColor,
         onTap: () {
-          Get.back();
+          Navigator.pop(context);
         },
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 0,horizontal: 13),

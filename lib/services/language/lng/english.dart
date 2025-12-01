@@ -98,6 +98,9 @@ final Map<String, String> enUS = {
   "more": "More",
   "are_you_sure_you_want_to_logout": "Are you sure you want to logout?",
   "logged_out_successfully": "Logged out successfully",
+  "no_notifications_title": "No Notifications",
+  "no_notifications_message":
+  "You don't have any notifications yet.\nWe'll notify you when something arrives.",
 
   // History Story
   "milk_history": "Milk History",
@@ -133,11 +136,11 @@ final Map<String, String> enUS = {
   "cancel_order": "Cancel Order",
   "important_notes": "Important Notes",
   "reduced_order_note":
-      "Reduced milk orders must be placed before 6:00 PM for the next day delivery. Orders cannot be modified or cancelled once confirmed.",
+      "It is necessary to inform about the evening milk increase or decrease before 5 PM.. Orders cannot be modified or cancelled once confirmed.",
   "extra_order_note":
-      "Extra milk orders must be placed before 6:00 PM for the next day delivery. Orders cannot be modified or cancelled once confirmed.",
+      "For the next morning’s milk increase or decrease, it is necessary to inform before 9 PM on the previous night. Orders cannot be modified or cancelled once confirmed.",
   "cancel_order_note":
-      "Order cancellations must be made before 6:00 PM for the next day delivery. Once cancelled, the order cannot be reinstated.",
+      "Order cancellations must be made before 5:00 PM for the next day delivery. Once cancelled, the order cannot be reinstated.",
   "monday": "Monday",
   "tuesday": "Tuesday",
   "wednesday": "Wednesday",
@@ -239,6 +242,7 @@ final Map<String, String> enUS = {
   'uploaded': 'Uploaded',
   'pending': 'Pending',
   'failed': 'Failed',
+  'delivered': 'Delivered',
   'failed_cash_payment': 'Failed to cash payment',
   'cash_payment_failed': 'Failed to process cash payment.',
   'upi_payment_failed': 'Failed to process UPI payment.',
@@ -283,4 +287,12 @@ final Map<String, String> enUS = {
   // Messages
   'will_be_sent': 'Will be sent',
   'whatsapp_message': 'WhatsApp Message',
+
+  // New keys for custom date range
+  'select_start_date': 'Select Start Date',
+  'select_end_date': 'Select End Date',
+  'apply_filter': 'Apply Filter',
+  'warning': 'Warning',
+  'please_select_both_dates': 'Please select both start and end dates',
+  'no_orders_in_selected_date_range': 'No orders found in the selected date range',
 };

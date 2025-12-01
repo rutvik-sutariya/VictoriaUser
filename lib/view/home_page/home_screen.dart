@@ -7,6 +7,7 @@ import 'package:victoria_user/utils/app_colors.dart';
 import 'package:victoria_user/utils/svg_path.dart';
 import 'package:victoria_user/utils/text_styles.dart';
 import 'package:victoria_user/widget/button/primary_button.dart';
+import '../../helper/routes_helper.dart';
 import '../components/custom_svg.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -160,40 +161,61 @@ class HomeScreen extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: AppColors.appPrimaryDarkColor.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: CustomSvg(
-                  path: SvgPath.victoriaFarm,
-                  height: 40,
-                  color: AppColors.appPrimaryDarkColor,
-                ),
-              ),
-              const SizedBox(width: 12),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "victoria_farm".tr,
-                    style: AppTextStyle.medium18.copyWith(
-                      fontWeight: FontWeight.w700,
-                      color: AppColors.appPrimaryDarkColor,
-                    ),
+          Expanded(
+            child: Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: AppColors.appPrimaryDarkColor.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(16),
                   ),
-                  Text(
-                    "fresh_milk_delivery".tr,
-                    style: AppTextStyle.small12.copyWith(
-                      color: Colors.grey.shade600,
-                    ),
+                  child: CustomSvg(
+                    path: SvgPath.victoriaFarm,
+                    height: 40,
+                    color: AppColors.appPrimaryDarkColor,
                   ),
-                ],
+                ),
+                const SizedBox(width: 12),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "victoria_farm".tr,
+                      style: AppTextStyle.medium18.copyWith(
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.appPrimaryDarkColor,
+                      ),
+                    ),
+                    Text(
+                      "fresh_milk_delivery".tr,
+                      style: AppTextStyle.small12.copyWith(
+                        color: Colors.grey.shade600,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          GestureDetector(
+            onTap: () {
+              Get.toNamed(Routes.notificationsPage);
+            },
+            child: Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: (AppColors.appPrimaryDarkColor).withOpacity(
+                  0.1,
+                ),
+                shape: BoxShape.circle,
               ),
-            ],
+              child: Icon(
+                Icons.notifications_outlined,
+                size: 22,
+                color:  AppColors.appPrimaryDarkColor,
+              ),
+            ),
           ),
         ],
       ),
@@ -458,6 +480,7 @@ class HomeScreen extends StatelessWidget {
       return "good_evening".tr;
     }
   }
+
 }
 
 /// =============================
@@ -588,12 +611,12 @@ class OrderExtraMilkCard extends StatelessWidget {
 
   final RxString extraOrder = "Morning".obs;
   final Rx<DateTime?> selectedDate = Rx<DateTime?>(null);
-  final Rx<double> selectedLiters = 1.0.obs;
+  final Rx<double> selectedLiters = 0.5.obs;
   final ApiController _controller = Get.put(ApiController());
 
   // Generate liter options: 1, 1.5, 2, 2.5, ..., 15
   final List<double> literOptions = List.generate(29, (index) {
-    return 1.0 + (index * 0.5);
+    return 0.5 + (index * 0.5);
   }).where((value) => value <= 15.0).toList();
 
   Future<void> _pickDate(BuildContext context) async {
@@ -874,12 +897,12 @@ class OrderReducedMilkCard extends StatelessWidget {
 
   final RxString reducedOrder = "Morning".obs;
   final Rx<DateTime?> selectedDate = Rx<DateTime?>(null);
-  final Rx<double> selectedLiters = 1.0.obs;
+  final Rx<double> selectedLiters = 0.5.obs;
   final ApiController _controller = Get.put(ApiController());
 
   // Generate liter options: 1, 1.5, 2, 2.5, ..., 15
   final List<double> literOptions = List.generate(29, (index) {
-    return 1.0 + (index * 0.5);
+    return 0.5 + (index * 0.5);
   }).where((value) => value <= 15.0).toList();
 
   Future<void> _pickDate(BuildContext context) async {
@@ -1454,4 +1477,6 @@ class NotesSection extends StatelessWidget {
       ],
     );
   }
+
+
 }

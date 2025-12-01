@@ -1,8 +1,6 @@
 class Config {
   static String baseUrl = 'http://147.93.108.251';
-
   static String uploadImage = '/api/upload-image';
-
   static String login = '/api/users/login-user';
   static String getUser = '/api/users/get-user/';
   static String milkHistory = '/api/milk/milk-history';
@@ -14,5 +12,6 @@ class Config {
   static String cashPayment = '/api/milk/send-cash-payment-request';
   static String upiPayment = '/api/milk/send-online-payment-request';
   static String notification = '/api/milk/get-milk-notification?userId=';
+  static String milkExportPdf = '/api/milk/milk-history-all?export=pdf';
 
 }
