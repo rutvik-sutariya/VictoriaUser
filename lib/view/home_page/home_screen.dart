@@ -25,7 +25,7 @@ class HomeScreen extends StatelessWidget {
           if (_controller.userDetails.value.data == null) {
             return _buildShimmerUI();
           }
-          return _buildRealUI();
+          return _buildRealUI( context);
         }),
       ),
     );
@@ -83,7 +83,7 @@ class HomeScreen extends StatelessWidget {
   /// =============================
   /// Real Data UI
   /// =============================
-  Widget _buildRealUI() {
+  Widget _buildRealUI(BuildContext context) {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(18),
       physics: const BouncingScrollPhysics(),
@@ -91,7 +91,7 @@ class HomeScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Header with Logo and Icons
-          _buildHeader(),
+          _buildHeader(context),
           const SizedBox(height: 24),
 
           // Welcome Section
@@ -143,7 +143,7 @@ class HomeScreen extends StatelessWidget {
     }
   }
 
-  Widget _buildHeader() {
+  Widget _buildHeader(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -200,6 +200,8 @@ class HomeScreen extends StatelessWidget {
           ),
           GestureDetector(
             onTap: () {
+
+
               Get.toNamed(Routes.notificationsPage);
             },
             child: Container(
@@ -693,7 +695,7 @@ class OrderExtraMilkCard extends StatelessWidget {
               const SizedBox(height: 16),
 
               // Order Button
-              _buildOrderButton(),
+              _buildOrderButton(context),
             ],
           ),
         ),
@@ -856,7 +858,7 @@ class OrderExtraMilkCard extends StatelessWidget {
     );
   }
 
-  Widget _buildOrderButton() {
+  Widget _buildOrderButton(BuildContext context) {
     final isEnabled = selectedDate.value != null;
     return SizedBox(
       width: double.infinity,
@@ -874,7 +876,7 @@ class OrderExtraMilkCard extends StatelessWidget {
             "requestedForDate":
             "${selectedDate.value!.year}-${selectedDate.value!.month.toString().padLeft(2, '0')}-${selectedDate.value!.day.toString().padLeft(2, '0')}",
           };
-          _controller.extraMilk(body).then((_) {
+          _controller.extraMilk(context,body).then((_) {
             selectedDate.value = null;
             if (onOrderComplete != null) {
               onOrderComplete!();
@@ -979,7 +981,7 @@ class OrderReducedMilkCard extends StatelessWidget {
               const SizedBox(height: 16),
 
               // Order Button
-              _buildOrderButton(),
+              _buildOrderButton(context,),
             ],
           ),
         ),
@@ -1138,7 +1140,7 @@ class OrderReducedMilkCard extends StatelessWidget {
     );
   }
 
-  Widget _buildOrderButton() {
+  Widget _buildOrderButton(BuildContext context,) {
     final isEnabled = selectedDate.value != null;
     return SizedBox(
       width: double.infinity,
@@ -1157,7 +1159,7 @@ class OrderReducedMilkCard extends StatelessWidget {
             "${selectedDate.value!.year}-${selectedDate.value!.month.toString().padLeft(2, '0')}-${selectedDate.value!.day.toString().padLeft(2, '0')}",
           };
           print("Body :: $body");
-          _controller.reducedMilk(body).then((_) {
+          _controller.reducedMilk(context,body).then((_) {
             selectedDate.value = null;
             if (onOrderComplete != null) {
               onOrderComplete!();
@@ -1252,7 +1254,7 @@ class NoOrderMilkCard extends StatelessWidget {
               const SizedBox(height: 16),
 
               // Cancel Button
-              _buildCancelButton(),
+              _buildCancelButton(context,),
             ],
           ),
         ),
@@ -1372,7 +1374,7 @@ class NoOrderMilkCard extends StatelessWidget {
     );
   }
 
-  Widget _buildCancelButton() {
+  Widget _buildCancelButton(BuildContext context) {
     final isEnabled = selectedDate.value != null;
     return SizedBox(
       width: double.infinity,
@@ -1390,7 +1392,7 @@ class NoOrderMilkCard extends StatelessWidget {
             "${selectedDate.value!.year}-${selectedDate.value!.month.toString().padLeft(2, '0')}-${selectedDate.value!.day.toString().padLeft(2, '0')}",
             "slot": noOrder.value.toLowerCase(),
           };
-          _controller.cancelOrder(body).then((_) {
+          _controller.cancelOrder(context,body).then((_) {
             if (onCancelComplete != null) {
               onCancelComplete!();
             }

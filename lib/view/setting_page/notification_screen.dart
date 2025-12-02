@@ -19,7 +19,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   @override
   void initState() {
     super.initState();
-    _controller.notification();
+    _controller.notification(context);
   }
 
   @override

@@ -199,6 +199,7 @@ final Map<String, String> guIN = {
   "no_data_for_selected_month": "પસંદ કરેલ મહિનાનો કોઈ ડેટા ઉપલબ્ધ નથી",
   "success": "સફળતા",
   "error": "ભૂલ",
+  "payment_summary": "ચુકવણી સારાંશ",
 
   // New translations for image picker and payment
   "choose_option": "વિકલ્પ પસંદ કરો",
@@ -254,6 +255,26 @@ final Map<String, String> guIN = {
   "status_processing": "પ્રક્રિયા ચાલુ",
   "status_completed": "પૂર્ણ",
   "status_failed": "નિષ્ફળ",
+  "amount_gu": "રકમ",
+  "due_date": "બાકી રહેવાની તારીખ",
+  // Payment Tab Bar
+  'total_due_amount': 'કુલ બાકી રકમ',
+  'due_amount_details': 'બાકી રકમની વિગતો',
+  'pay_pending_amounts': 'તમારી બાકી રકમ ચુકવો',
+  'days_overdue': 'દિવસો ઓવરડ્યૂ',
+  'overdue': 'ઓવરડ્યૂ',
+  'view_details': 'વિગતો જુઓ',
+  'pay_due_amount': 'બાકી રકમ ચુકવો',
+  'confirm_payment_for': 'ચુકવણી પુષ્ટિ કરો',
+  'payment_initiated': 'પેમેન્ટ સફળતાપૂર્વક શરૂ કરાઈ',
+  "overdue_days": "બાકી રહેલા દિવસો",
+  "price_per_liter": "પ્રતિ લિટર ભાવ",
+
+  "total_summary": "કુલ સારાંશ",
+  "pay_all_pending_months": "બધી બાકી રહેલી મહિનાની ચુકવણી કરો",
+  "total_amount_includes_all_pending_months": "કુલ રકમમાં બધી બાકી રહેલી મહિનાઓનો સમાવેશ થાય છે",
+  "clearing_all_pending_months": "બધી બાકી રહેલી મહિનાઓ સમાપ્ત કરવી",
+
 
   // Reduced Milk Card
   "order_reduced_milk": "ઓછું દૂધ ઓર્ડર કરો",

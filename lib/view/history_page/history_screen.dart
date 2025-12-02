@@ -54,8 +54,8 @@ class _HistoryScreenState extends State<HistoryScreen> {
       body['startDate'] = DateFormat('yyyy-MM-dd').format(_startDate!);
       body['endDate'] = DateFormat('yyyy-MM-dd').format(_endDate!);
     }
-
-    _controller.getMilkHistory(body);
+    print("Body :: $body");
+    _controller.getMilkHistory(context,body);
   }
 
   Future<void> _selectStartDate(BuildContext context) async {
@@ -324,7 +324,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                       body['endDate'] = DateFormat('yyyy-MM-dd').format(_endDate!);
                     }
                     print("body :: $body");
-                    _controller.milkPdfExport(body);
+                    _controller.milkPdfExport(context,body);
                   },
                   icon: const Icon(
                     Icons.download_rounded,

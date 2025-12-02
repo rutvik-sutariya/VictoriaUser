@@ -28,7 +28,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   @override
   void initState() {
-    _controller.getUser();
+    _controller.getUser(context,);
     super.initState();
   }
 

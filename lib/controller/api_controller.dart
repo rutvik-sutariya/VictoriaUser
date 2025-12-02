@@ -6,9 +6,11 @@ import 'package:http/http.dart' as http;
 import 'package:victoria_user/global_variable.dart';
 import 'package:victoria_user/model/notification_model.dart';
 import 'package:victoria_user/model/payment_summary_model.dart';
+import 'package:victoria_user/widget/app_snackbar.dart';
 import '../helper/routes_helper.dart';
 import '../main.dart';
 import '../model/milk_history_model.dart';
+import '../model/month_summery_model.dart';
 import '../model/user_model.dart';
 import '../services/api_service/api_manager.dart';
 import '../services/api_service/config.dart';
@@ -31,6 +33,7 @@ class ApiController extends GetxController {
   final RxBool isReducedMilkLoading = false.obs;
   final RxBool isNotificationLoading = false.obs;
   final RxBool isExportLoading = false.obs;
+  final RxBool isMonthSummeryLoading = false.obs;
   final RxString imageUrl = "".obs;
 
   final RxList<String> employeeList = <String>[].obs;
@@ -38,9 +41,10 @@ class ApiController extends GetxController {
   final Rx<MilkHistoryModel> milkHistoryDetails = MilkHistoryModel().obs;
   final Rx<PaymentSummaryModel> paymentDetails = PaymentSummaryModel().obs;
   final Rx<NotificationModel> notificationDetails = NotificationModel().obs;
+  final Rx<MonthSummeryModel> monthDetails = MonthSummeryModel().obs;
 
   // Login Api
-  Future<void> login(body) async {
+  Future<void> login(BuildContext context,body) async {
     isLoginLoading.value = true;
 
     try {
@@ -60,6 +64,7 @@ class ApiController extends GetxController {
           Constant.token.value,
         );
 
+        AppSnackbar.success(context, "Login Successful");
         Get.snackbar(
           "Success",
           "Login Successful",
@@ -70,15 +75,12 @@ class ApiController extends GetxController {
 
         Get.offAllNamed(Routes.dashboardPage);
       } else {
-        Get.snackbar(
-          "Failed",
-          jsonData["message"] ?? "Login failed",
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.red,
-          colorText: Colors.white,
-        );
+        AppSnackbar.success(context,  jsonData["message"] ?? "Login failed",);
+
       }
     } catch (e) {
+      AppSnackbar.success(context,  e.toString(),);
+
       Get.snackbar(
         "Error",
         e.toString(),
@@ -92,7 +94,7 @@ class ApiController extends GetxController {
   }
 
   // Get User
-  Future<void> getUser() async {
+  Future<void> getUser(BuildContext context,) async {
     isUserLoading.value = true;
     try {
       final response = await ApiManager.instance.post(
@@ -127,7 +129,7 @@ class ApiController extends GetxController {
   }
 
   // Milk History
-  Future<void> getMilkHistory(body) async {
+  Future<void> getMilkHistory(BuildContext context,body) async {
     isMilkHisLoading.value = true;
     try {
       final response = await ApiManager.instance.post(
@@ -162,7 +164,7 @@ class ApiController extends GetxController {
   }
 
   // Cancel Order
-  Future<void> cancelOrder(body) async {
+  Future<void> cancelOrder(BuildContext context,body) async {
     isCancelLoading.value = true;
     try {
       final response = await ApiManager.instance.post(
@@ -202,7 +204,7 @@ class ApiController extends GetxController {
   }
 
   // Extra Milk
-  Future<void> extraMilk(body) async {
+  Future<void> extraMilk(BuildContext context,body) async {
     isExtraMilkLoading.value = true;
     try {
       final response = await ApiManager.instance.post(
@@ -243,7 +245,7 @@ class ApiController extends GetxController {
   }
 
   // Extra Milk
-  Future<void> reducedMilk(body) async {
+  Future<void> reducedMilk(BuildContext context,body) async {
     isReducedMilkLoading.value = true;
     try {
       final response = await ApiManager.instance.post(
@@ -285,7 +287,7 @@ class ApiController extends GetxController {
   }
 
   // Extra Milk
-  Future<void> paymentSummery(body) async {
+  Future<void> paymentSummery(BuildContext context,body) async {
     isSummeryLoading.value = true;
     try {
       final response = await ApiManager.instance.post(
@@ -319,8 +321,43 @@ class ApiController extends GetxController {
     }
   }
 
+  // Extra Milk
+  Future<void> monthSummery(BuildContext context,) async {
+    isMonthSummeryLoading.value = true;
+    try {
+      final response = await ApiManager.instance.post(
+        endpoint: Config.monthSummery,
+        headers: true,
+        body: {"userId": Constant.userId.value},
+      );
+      final jsonData = jsonDecode(response.body);
+      print("Month Summery :: ${response.body}");
+      if (response.statusCode == 200) {
+        monthDetails(monthSummeryModelFromJson(response.body));
+      } else {
+        Get.snackbar(
+          "Failed",
+          jsonData["message"] ?? "Failed to add extra milk",
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+        );
+      }
+    } catch (e) {
+      Get.snackbar(
+        "Error",
+        e.toString(),
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+    } finally {
+      isMonthSummeryLoading.value = false;
+    }
+  }
+
   // Employee
-  Future<void> employee() async {
+  Future<void> employee(BuildContext context,) async {
     isEmployeeLoading.value = true;
     try {
       final response = await ApiManager.instance.get(
@@ -365,7 +402,7 @@ class ApiController extends GetxController {
   }
 
   // Notification
-  Future<void> notification() async {
+  Future<void> notification(BuildContext context,) async {
     isNotificationLoading.value = true;
     try {
       final response = await ApiManager.instance.post(
@@ -400,7 +437,7 @@ class ApiController extends GetxController {
   }
 
   // Milk History
-  Future<void> milkPdfExport(body) async {
+  Future<void> milkPdfExport(BuildContext context,body) async {
     isExportLoading.value = true;
     try {
       final url = Uri.parse(Config.baseUrl + Config.milkExportPdf);
@@ -424,7 +461,6 @@ class ApiController extends GetxController {
       } else {
         debugPrint("Failed: ${response.statusCode} ${response.reasonPhrase}");
       }
-
     } catch (e) {
       Get.snackbar(
         "Error",
@@ -439,7 +475,7 @@ class ApiController extends GetxController {
   }
 
   // Cash Payment
-  Future<void> processCashPayment(body, whatsappNumber, messages) async {
+  Future<void> processCashPayment(BuildContext context,body) async {
     isCashPaymentLoading.value = true;
     try {
       final response = await ApiManager.instance.post(
@@ -493,7 +529,7 @@ class ApiController extends GetxController {
   }
 
   // UPI Payment
-  Future<void> processUpiPayment(body, whatsappNumber, messages) async {
+  Future<void> processUpiPayment(BuildContext context,body) async {
     isUpiPaymentLoading.value = true;
     try {
       final response = await ApiManager.instance.post(

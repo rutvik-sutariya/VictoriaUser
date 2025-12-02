@@ -201,7 +201,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   "mobile": phoneController.text,
                                   "password": passwordController.text,
                                 };
-                                _controller.login(body);
+                                _controller.login(context,body);
                               }
                             },
                             color: AppColors.appPrimaryDarkColor,

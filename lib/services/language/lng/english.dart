@@ -256,8 +256,16 @@ final Map<String, String> enUS = {
   // Reduced Milk Card
   "order_reduced_milk": "Order Reduced Milk",
   "select_reduced_quantity": "Select Reduced Quantity",
+  "overdue_days": "Overdue Days",
+  "price_per_liter": "Price per Liter",
+  "total_summary": "Total Summary",
+  "pay_all_pending_months": "Pay all pending months",
+  "total_amount_includes_all_pending_months": "Total amount includes all pending months",
+  "clearing_all_pending_months": "Clearing all pending months",
 
   // Payment Status
+  "amount": "Amount",
+  "due_date": "Due Date",
   'payment_pending': 'Payment Pending',
   'payment_under_review': 'Your payment is under review and awaiting approval',
   'admin_approval_pending':
@@ -274,6 +282,17 @@ final Map<String, String> enUS = {
   'support_contact_info': 'Please contact support for more information',
   'payment_status': 'Payment Status',
   'confirm_payment': 'Confirm Payment',
+  "payment_summary": "Payment Summary",
+  "total_due_amount": "Total Due Amount",
+
+  'due_amount_details': 'Due Amount Details',
+  'pay_pending_amounts': 'Pay your pending amounts',
+  'days_overdue': 'days overdue',
+  'overdue': 'Overdue',
+  'view_details': 'View Details',
+  'pay_due_amount': 'Pay Due Amount',
+  'confirm_payment_for': 'Confirm payment for',
+  'payment_initiated': 'Payment initiated successfully',
 
   // Status
   'confirmed': 'Confirmed',
