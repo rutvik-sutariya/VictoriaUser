@@ -1886,12 +1886,12 @@ class _DueAmountTabState extends State<DueAmountTab> {
               fontWeight: FontWeight.w600,
             ),
           ),
-          const SizedBox(height: 8),
-          Text(
-            "no_due_amounts_found".tr,
-            style: AppTextStyle.small14.copyWith(color: Colors.grey.shade500),
-            textAlign: TextAlign.center,
-          ),
+          // const SizedBox(height: 8),
+          // Text(
+          //   "no_due_amounts_found".tr,
+          //   style: AppTextStyle.small14.copyWith(color: Colors.grey.shade500),
+          //   textAlign: TextAlign.center,
+          // ),
         ],
       ),
     );

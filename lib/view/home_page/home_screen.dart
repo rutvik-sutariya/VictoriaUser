@@ -622,12 +622,22 @@ class OrderExtraMilkCard extends StatelessWidget {
   }).where((value) => value <= 15.0).toList();
 
   Future<void> _pickDate(BuildContext context) async {
+    final now = DateTime.now();
+    final int today = now.day;
+
+    // आज के बाद के अगले 2 दिन
+    final tomorrow = now.add(Duration(days: 1));
+    final dayAfterTomorrow = now.add(Duration(days: 2));
+
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: selectedDate.value ?? DateTime.now(),
-      firstDate: DateTime.now(),
-      lastDate: DateTime(2100),
+      initialDate: tomorrow, // Default tomorrow दिखे
+      firstDate: tomorrow, // सबसे पहला date tomorrow हो
+      lastDate: dayAfterTomorrow, // सबसे आखिरी date day after tomorrow हो
+
+      // 🔥 सिर्फ 2 dates selectable होंगी: tomorrow और day after tomorrow
     );
+
     if (picked != null) selectedDate.value = picked;
   }
 
@@ -908,12 +918,22 @@ class OrderReducedMilkCard extends StatelessWidget {
   }).where((value) => value <= 15.0).toList();
 
   Future<void> _pickDate(BuildContext context) async {
+    final now = DateTime.now();
+    final int today = now.day;
+
+    // आज के बाद के अगले 2 दिन
+    final tomorrow = now.add(Duration(days: 1));
+    final dayAfterTomorrow = now.add(Duration(days: 2));
+
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: selectedDate.value ?? DateTime.now(),
-      firstDate: DateTime.now(),
-      lastDate: DateTime(2100),
+      initialDate: tomorrow, // Default tomorrow दिखे
+      firstDate: tomorrow, // सबसे पहला date tomorrow हो
+      lastDate: dayAfterTomorrow, // सबसे आखिरी date day after tomorrow हो
+
+      // 🔥 सिर्फ 2 dates selectable होंगी: tomorrow और day after tomorrow
     );
+
     if (picked != null) selectedDate.value = picked;
   }
 
@@ -1185,12 +1205,22 @@ class NoOrderMilkCard extends StatelessWidget {
   final ApiController _controller = Get.put(ApiController());
 
   Future<void> _pickDate(BuildContext context) async {
+    final now = DateTime.now();
+    final int today = now.day;
+
+    // आज के बाद के अगले 2 दिन
+    final tomorrow = now.add(Duration(days: 1));
+    final dayAfterTomorrow = now.add(Duration(days: 2));
+
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: selectedDate.value ?? DateTime.now(),
-      firstDate: DateTime.now(),
-      lastDate: DateTime(2100),
+      initialDate: tomorrow, // Default tomorrow दिखे
+      firstDate: tomorrow, // सबसे पहला date tomorrow हो
+      lastDate: dayAfterTomorrow, // सबसे आखिरी date day after tomorrow हो
+
+      // 🔥 सिर्फ 2 dates selectable होंगी: tomorrow और day after tomorrow
     );
+
     if (picked != null) selectedDate.value = picked;
   }
 

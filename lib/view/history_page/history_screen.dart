@@ -318,7 +318,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                 ),
                 child: IconButton(
                   onPressed: () {
-                    final body = {"filterType": _selectedFilter};
+                    final body = {"userId": Constant.userId.value,"filterType": _selectedFilter};
                     if (_selectedFilter == 'custom' && _startDate != null && _endDate != null) {
                       body['startDate'] = DateFormat('yyyy-MM-dd').format(_startDate!);
                       body['endDate'] = DateFormat('yyyy-MM-dd').format(_endDate!);

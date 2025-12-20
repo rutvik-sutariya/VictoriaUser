@@ -44,7 +44,7 @@ class ApiController extends GetxController {
   final Rx<MonthSummeryModel> monthDetails = MonthSummeryModel().obs;
 
   // Login Api
-  Future<void> login(BuildContext context,body) async {
+  Future<void> login(BuildContext context, body) async {
     isLoginLoading.value = true;
 
     try {
@@ -65,36 +65,20 @@ class ApiController extends GetxController {
         );
 
         AppSnackbar.success(context, "Login Successful");
-        Get.snackbar(
-          "Success",
-          "Login Successful",
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.green,
-          colorText: Colors.white,
-        );
 
         Get.offAllNamed(Routes.dashboardPage);
       } else {
-        AppSnackbar.success(context,  jsonData["message"] ?? "Login failed",);
-
+        AppSnackbar.error(context, jsonData["message"] ?? "Login failed");
       }
     } catch (e) {
-      AppSnackbar.success(context,  e.toString(),);
-
-      Get.snackbar(
-        "Error",
-        e.toString(),
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-      );
+      AppSnackbar.error(context, "Error");
     } finally {
       isLoginLoading.value = false;
     }
   }
 
   // Get User
-  Future<void> getUser(BuildContext context,) async {
+  Future<void> getUser(BuildContext context) async {
     isUserLoading.value = true;
     try {
       final response = await ApiManager.instance.post(
@@ -107,29 +91,20 @@ class ApiController extends GetxController {
       if (response.statusCode == 200) {
         userDetails(userModelFromJson(response.body));
       } else {
-        Get.snackbar(
-          "Failed",
+        AppSnackbar.error(
+          context,
           jsonData["message"] ?? "Unable to fetch user",
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.red,
-          colorText: Colors.white,
         );
       }
     } catch (e) {
-      Get.snackbar(
-        "Error",
-        e.toString(),
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-      );
+      AppSnackbar.error(context, "Error");
     } finally {
       isUserLoading.value = false;
     }
   }
 
   // Milk History
-  Future<void> getMilkHistory(BuildContext context,body) async {
+  Future<void> getMilkHistory(BuildContext context, body) async {
     isMilkHisLoading.value = true;
     try {
       final response = await ApiManager.instance.post(
@@ -142,29 +117,20 @@ class ApiController extends GetxController {
       if (response.statusCode == 200) {
         milkHistoryDetails(milkHistoryModelFromJson(response.body));
       } else {
-        Get.snackbar(
-          "Failed",
+        AppSnackbar.error(
+          context,
           jsonData["message"] ?? "Unable to fetch milk history",
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.red,
-          colorText: Colors.white,
         );
       }
     } catch (e) {
-      Get.snackbar(
-        "Error",
-        e.toString(),
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-      );
+      AppSnackbar.error(context, "Error");
     } finally {
       isMilkHisLoading.value = false;
     }
   }
 
   // Cancel Order
-  Future<void> cancelOrder(BuildContext context,body) async {
+  Future<void> cancelOrder(BuildContext context, body) async {
     isCancelLoading.value = true;
     try {
       final response = await ApiManager.instance.post(
@@ -175,36 +141,22 @@ class ApiController extends GetxController {
       final jsonData = jsonDecode(response.body);
 
       if (response.statusCode == 200) {
-        Get.snackbar(
-          "success".tr,
-          "cash_payment_recorded".tr,
-          backgroundColor: Colors.green,
-          colorText: Colors.white,
-        );
+        AppSnackbar.success(context, "cash_payment_recorded".tr);
       } else {
-        Get.snackbar(
-          "failed".tr,
+        AppSnackbar.error(
+          context,
           jsonData["message"] ?? "failed_cash_payment".tr,
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.red,
-          colorText: Colors.white,
         );
       }
     } catch (e) {
-      Get.snackbar(
-        "Error",
-        e.toString(),
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-      );
+      AppSnackbar.error(context, "Error");
     } finally {
       isCancelLoading.value = false;
     }
   }
 
   // Extra Milk
-  Future<void> extraMilk(BuildContext context,body) async {
+  Future<void> extraMilk(BuildContext context, body) async {
     isExtraMilkLoading.value = true;
     try {
       final response = await ApiManager.instance.post(
@@ -215,37 +167,22 @@ class ApiController extends GetxController {
       final jsonData = jsonDecode(response.body);
 
       if (response.statusCode == 200) {
-        Get.snackbar(
-          "Success",
-          "Extra milk added successfully",
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.green,
-          colorText: Colors.white,
-        );
+        AppSnackbar.success(context, "Extra milk added successfully");
       } else {
-        Get.snackbar(
-          "Failed",
+        AppSnackbar.error(
+          context,
           jsonData["message"] ?? "Failed to add extra milk",
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.red,
-          colorText: Colors.white,
         );
       }
     } catch (e) {
-      Get.snackbar(
-        "Error",
-        e.toString(),
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-      );
+      AppSnackbar.error(context, e.toString());
     } finally {
       isExtraMilkLoading.value = false;
     }
   }
 
   // Extra Milk
-  Future<void> reducedMilk(BuildContext context,body) async {
+  Future<void> reducedMilk(BuildContext context, body) async {
     isReducedMilkLoading.value = true;
     try {
       final response = await ApiManager.instance.post(
@@ -257,37 +194,22 @@ class ApiController extends GetxController {
       final jsonData = jsonDecode(response.body);
 
       if (response.statusCode == 200) {
-        Get.snackbar(
-          "Success",
-          "Reduced milk added successfully",
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.green,
-          colorText: Colors.white,
-        );
+        AppSnackbar.success(context, "Reduced milk added successfully");
       } else {
-        Get.snackbar(
-          "Failed",
+        AppSnackbar.error(
+          context,
           jsonData["message"] ?? "Failed to add reduced milk",
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.red,
-          colorText: Colors.white,
         );
       }
     } catch (e) {
-      Get.snackbar(
-        "Error",
-        e.toString(),
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-      );
+      AppSnackbar.error(context, e.toString());
     } finally {
       isReducedMilkLoading.value = false;
     }
   }
 
   // Extra Milk
-  Future<void> paymentSummery(BuildContext context,body) async {
+  Future<void> paymentSummery(BuildContext context, body) async {
     isSummeryLoading.value = true;
     try {
       final response = await ApiManager.instance.post(
@@ -300,29 +222,20 @@ class ApiController extends GetxController {
       if (response.statusCode == 200) {
         paymentDetails(paymentSummaryModelFromJson(response.body));
       } else {
-        Get.snackbar(
-          "Failed",
+        AppSnackbar.error(
+          context,
           jsonData["message"] ?? "Failed to add extra milk",
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.red,
-          colorText: Colors.white,
         );
       }
     } catch (e) {
-      Get.snackbar(
-        "Error",
-        e.toString(),
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-      );
+      AppSnackbar.error(context, e.toString());
     } finally {
       isSummeryLoading.value = false;
     }
   }
 
   // Extra Milk
-  Future<void> monthSummery(BuildContext context,) async {
+  Future<void> monthSummery(BuildContext context) async {
     isMonthSummeryLoading.value = true;
     try {
       final response = await ApiManager.instance.post(
@@ -335,29 +248,20 @@ class ApiController extends GetxController {
       if (response.statusCode == 200) {
         monthDetails(monthSummeryModelFromJson(response.body));
       } else {
-        Get.snackbar(
-          "Failed",
+        AppSnackbar.error(
+          context,
           jsonData["message"] ?? "Failed to add extra milk",
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.red,
-          colorText: Colors.white,
         );
       }
     } catch (e) {
-      Get.snackbar(
-        "Error",
-        e.toString(),
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-      );
+      AppSnackbar.error(context, e.toString());
     } finally {
       isMonthSummeryLoading.value = false;
     }
   }
 
   // Employee
-  Future<void> employee(BuildContext context,) async {
+  Future<void> employee(BuildContext context) async {
     isEmployeeLoading.value = true;
     try {
       final response = await ApiManager.instance.get(
@@ -380,29 +284,20 @@ class ApiController extends GetxController {
 
         print("Employee List: $employeeList");
       } else {
-        Get.snackbar(
-          "Failed",
+        AppSnackbar.error(
+          context,
           jsonData["message"] ?? "Failed to fetch employees",
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.red,
-          colorText: Colors.white,
         );
       }
     } catch (e) {
-      Get.snackbar(
-        "Error",
-        e.toString(),
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-      );
+      AppSnackbar.error(context, e.toString());
     } finally {
       isEmployeeLoading.value = false;
     }
   }
 
   // Notification
-  Future<void> notification(BuildContext context,) async {
+  Future<void> notification(BuildContext context) async {
     isNotificationLoading.value = true;
     try {
       final response = await ApiManager.instance.post(
@@ -415,29 +310,17 @@ class ApiController extends GetxController {
       if (response.statusCode == 200) {
         notificationDetails(notificationModelFromJson(response.body));
       } else {
-        Get.snackbar(
-          "Failed",
-          jsonData["message"] ?? "Unable to order",
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.red,
-          colorText: Colors.white,
-        );
+        AppSnackbar.error(context, jsonData["message"] ?? "Unable to order");
       }
     } catch (e) {
-      Get.snackbar(
-        "Error",
-        e.toString(),
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-      );
+      AppSnackbar.error(context, e.toString());
     } finally {
       isNotificationLoading.value = false;
     }
   }
 
   // Milk History
-  Future<void> milkPdfExport(BuildContext context,body) async {
+  Future<void> milkPdfExport(BuildContext context, body) async {
     isExportLoading.value = true;
     try {
       final url = Uri.parse(Config.baseUrl + Config.milkExportPdf);
@@ -462,20 +345,14 @@ class ApiController extends GetxController {
         debugPrint("Failed: ${response.statusCode} ${response.reasonPhrase}");
       }
     } catch (e) {
-      Get.snackbar(
-        "Error",
-        e.toString(),
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-      );
+      AppSnackbar.error(context, e.toString());
     } finally {
       isExportLoading.value = false;
     }
   }
 
   // Cash Payment
-  Future<void> processCashPayment(BuildContext context,body) async {
+  Future<void> processCashPayment(BuildContext context, body) async {
     isCashPaymentLoading.value = true;
     try {
       final response = await ApiManager.instance.post(
@@ -488,48 +365,29 @@ class ApiController extends GetxController {
       print("Cash Payment :: $jsonData :: ${response.statusCode}");
 
       if (response.statusCode == 200) {
-        Get.snackbar(
-          "success".tr,
-          "cash_payment_recorded".tr,
-          backgroundColor: Colors.green,
-          colorText: Colors.white,
-        );
+        AppSnackbar.success(context, "cash_payment_recorded".tr);
         final whatsappLink = jsonData["whatsappLink"];
 
         if (whatsappLink != null && whatsappLink.toString().isNotEmpty) {
           sendWhatsAppMessage(whatsappLink);
         } else {
-          Get.snackbar(
-            "error".tr,
-            "whatsapp_link_not_found".tr,
-            backgroundColor: Colors.red,
-            colorText: Colors.white,
-          );
+          AppSnackbar.error(context, "whatsapp_link_not_found".tr);
         }
       } else {
-        Get.snackbar(
-          "failed".tr,
+        AppSnackbar.error(
+          context,
           jsonData["message"] ?? "cash_payment_failed".tr,
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.red,
-          colorText: Colors.white,
         );
       }
     } catch (e) {
-      Get.snackbar(
-        "error".tr,
-        "something_went_wrong".tr,
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-      );
+      AppSnackbar.error(context, "something_went_wrong".tr);
     } finally {
       isCashPaymentLoading.value = false;
     }
   }
 
   // UPI Payment
-  Future<void> processUpiPayment(BuildContext context,body) async {
+  Future<void> processUpiPayment(BuildContext context, body) async {
     isUpiPaymentLoading.value = true;
     try {
       final response = await ApiManager.instance.post(
@@ -547,37 +405,18 @@ class ApiController extends GetxController {
         if (whatsappLink != null && whatsappLink.toString().isNotEmpty) {
           sendWhatsAppMessage(whatsappLink);
         } else {
-          Get.snackbar(
-            "error".tr,
-            "whatsapp_link_not_found".tr,
-            backgroundColor: Colors.red,
-            colorText: Colors.white,
-          );
+          AppSnackbar.error(context, "whatsapp_link_not_found".tr);
         }
 
-        Get.snackbar(
-          "success".tr,
-          "upi_payment_submitted".tr,
-          backgroundColor: Colors.green,
-          colorText: Colors.white,
-        );
+        AppSnackbar.success(context, "upi_payment_submitted".tr);
       } else {
-        Get.snackbar(
-          "failed".tr,
+        AppSnackbar.error(
+          context,
           jsonData["message"] ?? "upi_payment_failed".tr,
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.red,
-          colorText: Colors.white,
         );
       }
     } catch (e) {
-      Get.snackbar(
-        "error".tr,
-        "something_went_wrong".tr,
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-      );
+      AppSnackbar.error(context, "something_went_wrong".tr);
     } finally {
       isUpiPaymentLoading.value = false;
     }
