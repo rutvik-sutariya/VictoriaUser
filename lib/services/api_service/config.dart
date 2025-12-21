@@ -12,7 +12,6 @@ class Config {
   static String cashPayment = '/api/milk/send-cash-payment-request';
   static String upiPayment = '/api/milk/send-online-payment-request';
   static String notification = '/api/milk/get-milk-notification?userId=';
-  static String milkExportPdf = '/api/milk/milk-history-all?export=pdf';
+  static String milkExportPdf = '/api/milk/milk-history?export=pdf';
   static String monthSummery = '/api/milk/get-pending-month-summery';
-
 }
