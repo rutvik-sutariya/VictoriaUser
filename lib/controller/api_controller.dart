@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -9,6 +10,7 @@ import 'package:victoria_user/model/payment_summary_model.dart';
 import 'package:victoria_user/widget/app_snackbar.dart';
 import '../helper/routes_helper.dart';
 import '../main.dart';
+import '../model/contact_model.dart';
 import '../model/milk_history_model.dart';
 import '../model/month_summery_model.dart';
 import '../model/user_model.dart';
@@ -34,6 +36,8 @@ class ApiController extends GetxController {
   final RxBool isNotificationLoading = false.obs;
   final RxBool isExportLoading = false.obs;
   final RxBool isMonthSummeryLoading = false.obs;
+  final RxBool isContactLoading = false.obs;
+
   final RxString imageUrl = "".obs;
 
   final RxList<String> employeeList = <String>[].obs;
@@ -42,6 +46,8 @@ class ApiController extends GetxController {
   final Rx<PaymentSummaryModel> paymentDetails = PaymentSummaryModel().obs;
   final Rx<NotificationModel> notificationDetails = NotificationModel().obs;
   final Rx<MonthSummeryModel> monthDetails = MonthSummeryModel().obs;
+  final Rx<ContactModel> contactDetails = ContactModel().obs;
+
 
   // Login Api
   Future<void> login(BuildContext context, body) async {
@@ -316,6 +322,58 @@ class ApiController extends GetxController {
       AppSnackbar.error(context, e.toString());
     } finally {
       isNotificationLoading.value = false;
+    }
+  }
+
+  // Contact Us
+  Future<void> contactUs() async {
+    isContactLoading.value = true;
+    try {
+      final response = await ApiManager.instance.get(
+        endpoint: Config.contactUs,
+        headers: false,
+      );
+      final jsonData = jsonDecode(response.body);
+      print("Contact Us :: ${response.body}");
+      if (response.statusCode == 200) {
+        contactDetails(contactModelFromJson(response.body));
+      } else {
+        if (Get.context != null && Get.context!.mounted) {
+          ScaffoldMessenger.of(Get.context!).showSnackBar(
+            SnackBar(
+              content: Text(jsonData["message"] ?? "Unable to contact us"),
+              backgroundColor: Colors.red,
+            ),
+          );
+        } else {
+          Get.snackbar(
+            "Failed",
+            jsonData["message"] ?? "Unable to contact us",
+            snackPosition: SnackPosition.BOTTOM,
+            backgroundColor: Colors.red,
+            colorText: Colors.white,
+          );
+        }
+      }
+    } catch (e) {
+      if (Get.context != null && Get.context!.mounted) {
+        ScaffoldMessenger.of(Get.context!).showSnackBar(
+          SnackBar(
+            content: Text(e.toString()),
+            backgroundColor: Colors.red,
+          ),
+        );
+      } else {
+        Get.snackbar(
+          "Error",
+          e.toString(),
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+        );
+      }
+    } finally {
+      isContactLoading.value = false;
     }
   }
 

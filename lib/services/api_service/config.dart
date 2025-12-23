@@ -14,4 +14,6 @@ class Config {
   static String notification = '/api/milk/get-milk-notification?userId=';
   static String milkExportPdf = '/api/milk/milk-history?export=pdf';
   static String monthSummery = '/api/milk/get-pending-month-summery';
+  static String contactUs = '/api/contact-us/get-contact';
+
 }

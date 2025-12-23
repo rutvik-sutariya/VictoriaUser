@@ -314,4 +314,16 @@ final Map<String, String> enUS = {
   'warning': 'Warning',
   'please_select_both_dates': 'Please select both start and end dates',
   'no_orders_in_selected_date_range': 'No orders found in the selected date range',
+
+  'email': 'Email',
+  'company_address': 'Company Address',
+  'get_directions': 'Get Directions',
+
+
+  // 无数据/错误状态
+  'no_contact_info_available': 'No contact information available',
+  'please_try_again_later': 'Please try again later',
+  'retry': 'Retry',
+  'cannot_send_email': 'Cannot send email',
+  'cannot_open_maps': 'Cannot open maps',
 };

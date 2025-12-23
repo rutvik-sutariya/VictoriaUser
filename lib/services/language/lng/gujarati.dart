@@ -322,4 +322,15 @@ final Map<String, String> guIN = {
   'please_select_both_dates': 'કૃપા કરીને બંને શરૂઆત અને અંતિમ તારીખ પસંદ કરો',
   'no_orders_in_selected_date_range': 'પસંદ કરેલી તારીખ શ્રેણીમાં કોઈ ઓર્ડર મળ્યા નથી',
 
+
+  'email': 'ઇમેઇલ',
+  'company_address': 'કંપનીનું સરનામું',
+  'get_directions': 'દિશા મેળવો',
+
+  'no_contact_info_available': 'સંપર્ક માહિતી ઉપલબ્ધ નથી',
+  'please_try_again_later': 'કૃપા કરીને પછીથી ફરી પ્રયાસ કરો',
+  'retry': 'ફરી પ્રયત્ન કરો',
+  'cannot_send_email': 'ઇમેઇલ મોકલી શકાતી નથી',
+  'cannot_open_maps': 'મેપ્સ ખોલી શકાતા નથી',
+
 };
