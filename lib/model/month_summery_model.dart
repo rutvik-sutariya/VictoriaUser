@@ -77,12 +77,12 @@ class PendingMonth {
 }
 
 class Summary {
-  int? totalMilkQuantity;
-  int? totalExtraMilk;
-  int? totalDeliveryDays;
-  int? totalLiters;
-  int? pricePerLiter;
-  int? totalAmount;
+  dynamic totalMilkQuantity;
+  dynamic? totalExtraMilk;
+  dynamic? totalDeliveryDays;
+  dynamic? totalLiters;
+  dynamic? pricePerLiter;
+  dynamic? totalAmount;
   String? paymentStatus;
 
   Summary({

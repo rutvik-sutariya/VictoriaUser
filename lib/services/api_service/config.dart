@@ -15,5 +15,6 @@ class Config {
   static String milkExportPdf = '/api/milk/milk-history?export=pdf';
   static String monthSummery = '/api/milk/get-pending-month-summery';
   static String contactUs = '/api/contact-us/get-contact';
+  static String resetSound = '/api/milk/reset-sound';
 
 }

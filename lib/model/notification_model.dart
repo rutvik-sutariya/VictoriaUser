@@ -11,23 +11,25 @@ String notificationModelToJson(NotificationModel data) => json.encode(data.toJso
 class NotificationModel {
   bool? success;
   String? message;
+  bool? sound;
   List<Notification>? data;
 
   NotificationModel({
     this.success,
-    this.message,
+    this.message,   this.sound,
     this.data,
   });
 
   factory NotificationModel.fromJson(Map<String, dynamic> json) => NotificationModel(
     success: json["success"],
     message: json["message"],
+    sound: json["sound"],
     data: json["data"] == null ? [] : List<Notification>.from(json["data"]!.map((x) => Notification.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {
     "success": success,
-    "message": message,
+    "message": message, "sound": sound,
     "data": data == null ? [] : List<dynamic>.from(data!.map((x) => x.toJson())),
   };
 }

@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:victoria_user/global_variable.dart';
 import 'package:victoria_user/model/notification_model.dart';
 import 'package:victoria_user/model/payment_summary_model.dart';
+import 'package:victoria_user/services/audio_service.dart';
 import 'package:victoria_user/widget/app_snackbar.dart';
 import '../helper/routes_helper.dart';
 import '../main.dart';
@@ -47,7 +48,6 @@ class ApiController extends GetxController {
   final Rx<NotificationModel> notificationDetails = NotificationModel().obs;
   final Rx<MonthSummeryModel> monthDetails = MonthSummeryModel().obs;
   final Rx<ContactModel> contactDetails = ContactModel().obs;
-
 
   // Login Api
   Future<void> login(BuildContext context, body) async {
@@ -96,6 +96,33 @@ class ApiController extends GetxController {
       print("User Details :: $jsonData");
       if (response.statusCode == 200) {
         userDetails(userModelFromJson(response.body));
+      } else {
+        AppSnackbar.error(
+          context,
+          jsonData["message"] ?? "Unable to fetch user",
+        );
+      }
+    } catch (e) {
+      AppSnackbar.error(context, "Error");
+    } finally {
+      isUserLoading.value = false;
+    }
+  }
+
+  // Get User
+  Future<void> resetSound(BuildContext context) async {
+    isUserLoading.value = true;
+    try {
+      final response = await ApiManager.instance.post(
+        endpoint: Config.resetSound ,
+        headers: false,
+        body: {
+          'userId' : Constant.userId.value
+        },
+      );
+      final jsonData = jsonDecode(response.body);
+      print("Reset Sound :: $jsonData");
+      if (response.statusCode == 200) {
       } else {
         AppSnackbar.error(
           context,
@@ -171,7 +198,7 @@ class ApiController extends GetxController {
         body: body,
       );
       final jsonData = jsonDecode(response.body);
-
+      print("jsonData :: $jsonData");
       if (response.statusCode == 200) {
         AppSnackbar.success(context, "Extra milk added successfully");
       } else {
@@ -315,6 +342,10 @@ class ApiController extends GetxController {
       print("Notification :: ${response.body}");
       if (response.statusCode == 200) {
         notificationDetails(notificationModelFromJson(response.body));
+        if(jsonData['sound'] == true) {
+          AudioService().playClick();
+          resetSound(context);
+        }
       } else {
         AppSnackbar.error(context, jsonData["message"] ?? "Unable to order");
       }
@@ -358,10 +389,7 @@ class ApiController extends GetxController {
     } catch (e) {
       if (Get.context != null && Get.context!.mounted) {
         ScaffoldMessenger.of(Get.context!).showSnackBar(
-          SnackBar(
-            content: Text(e.toString()),
-            backgroundColor: Colors.red,
-          ),
+          SnackBar(content: Text(e.toString()), backgroundColor: Colors.red),
         );
       } else {
         Get.snackbar(

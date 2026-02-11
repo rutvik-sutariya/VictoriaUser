@@ -30,12 +30,12 @@ class PaymentSummaryModel {
 
 class Data {
   String? month;
-  int? milkQuantity;
-  int? deliveryDays;
-  int? extraMilk;
-  int? totalLitre;
-  int? pricePerLiter;
-  int? totalAmount;
+  dynamic milkQuantity;
+  dynamic deliveryDays;
+  dynamic extraMilk;
+  dynamic totalLitre;
+  dynamic pricePerLiter;
+  dynamic totalAmount;
   String? paymentStatus;
 
   Data({
