@@ -278,7 +278,7 @@ final Map<String, String> guIN = {
 
   // Reduced Milk Card
   "order_reduced_milk": "ઓછું દૂધ ઓર્ડર કરો",
-  "select_reduced_quantity": "રિડ્યુસ ક્વોન્ટિટી પસંદઓછી માત્રા પસંદ કરો",
+  "select_reduced_quantity": "ઓછી માત્રા પસંદ કરો",
 
   // Payment Status
   'payment_pending': 'ચુકવણી',

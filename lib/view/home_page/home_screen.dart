@@ -662,7 +662,7 @@ class OrderExtraMilkCard extends StatelessWidget {
   final ApiController _controller = Get.put(ApiController());
 
   // Generate liter options: 1, 1.5, 2, 2.5, ..., 15
-  final List<double> literOptions = List.generate(29, (index) {
+  final List<double> literOptions = List.generate(20, (index) {
     return 0.5 + (index * 0.5);
   }).where((value) => value <= 15.0).toList();
 
@@ -985,7 +985,399 @@ class OrderExtraMilkCard extends StatelessWidget {
 /// =============================
 /// Enhanced Order Reduced Milk Card with Decimal Liter Options
 /// =============================
+/// =============================
+/// Updated Order Reduced Milk Card with Static Length
+/// =============================
 class OrderReducedMilkCard extends StatelessWidget {
+  final VoidCallback? onOrderComplete;
+
+  OrderReducedMilkCard({super.key, this.onOrderComplete});
+
+  final RxString reducedOrder = "Morning".obs;
+  final Rx<DateTime?> selectedDate = Rx<DateTime?>(null);
+  final Rx<double> selectedLiters = 0.5.obs;
+  final ApiController _controller = Get.put(ApiController());
+
+
+  // Get morning and evening liters from user data and convert to double
+  double get morningLiters => (_controller.userDetails.value.data?.morningLiters ?? 0).toDouble();
+  double get eveningLiters => (_controller.userDetails.value.data?.eveningLiters ?? 0).toDouble();
+  // Generate liter options based on available liters for selected slot
+  List<double> get literOptions {
+    final double maxLiters = reducedOrder.value == "Morning"
+        ? morningLiters
+        : eveningLiters;
+
+    if (maxLiters <= 0) return [];
+
+    // Generate options from 0.5 to maxLiters in 0.5 increments
+    return List.generate((maxLiters * 2).floor(), (index) {
+      return 0.5 + (index * 0.5);
+    }).where((value) => value <= maxLiters).toList();
+  }
+
+  // Update selected liters when slot changes
+  void _updateLitersForSlot() {
+    if (literOptions.isNotEmpty) {
+      selectedLiters.value = literOptions.first;
+    }
+  }
+
+  Future<void> _pickDate(BuildContext context) async {
+    final now = DateTime.now();
+    // आज के बाद के अगले 2 दिन
+    final tomorrow = now.add(Duration(days: 1));
+    final dayAfterTomorrow = now.add(Duration(days: 2));
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: now, // ✅ By default आज का date select हो
+      firstDate: now, // आज से शुरू
+      lastDate: dayAfterTomorrow, // परसों तक
+    );
+
+    if (picked != null) {
+      selectedDate.value = picked;
+      _updateLitersForSlot();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Obx(
+          () => Container(
+        decoration: BoxDecoration(
+          color: AppColors.appWhiteColor,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              blurRadius: 10,
+              spreadRadius: 2,
+              offset: const Offset(0, 3),
+            ),
+          ],
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: Colors.orange.withOpacity(0.1),
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(
+                      Icons.remove_circle_outline_rounded,
+                      color: Colors.orange,
+                      size: 20,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    "order_reduced_milk".tr,
+                    style: AppTextStyle.medium18.copyWith(
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  const Spacer(),
+                  IconButton(
+                    onPressed: onOrderComplete,
+                    icon: Icon(Icons.close, color: Colors.grey.shade600),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
+
+              // Date Picker (moved to top as per user flow)
+              _buildDatePicker(context),
+              const SizedBox(height: 12),
+
+              // Slot Selection
+              _buildSlotSelector(),
+              const SizedBox(height: 12),
+
+              // Liters Selection - Only show if liter options are available
+              if (literOptions.isNotEmpty) ...[
+                _buildLitersSelector(),
+                const SizedBox(height: 16),
+              ],
+
+              // Show message if no liters available for selected slot
+              if (literOptions.isEmpty && selectedDate.value != null)
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: Colors.orange.shade50,
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(color: Colors.orange.shade200),
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(Icons.info_outline, color: Colors.orange.shade700, size: 20),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          "No milk allocated for ${reducedOrder.value.toLowerCase()} slot on this date",
+                          style: AppTextStyle.small14.copyWith(
+                            color: Colors.orange.shade700,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+              // Order Button
+              _buildOrderButton(context),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildLitersSelector() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          "select_reduced_quantity".tr,
+          style: AppTextStyle.small14.copyWith(
+            fontWeight: FontWeight.w500,
+            color: Colors.grey.shade600,
+          ),
+        ),
+        const SizedBox(height: 8),
+        Container(
+          height: 50,
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          decoration: BoxDecoration(
+            color: AppColors.appBgColor,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: Colors.grey.shade300),
+          ),
+          child: DropdownButton<double>(
+            value: selectedLiters.value,
+            underline: const SizedBox(),
+            isExpanded: true,
+            borderRadius: BorderRadius.circular(12),
+            items: literOptions.map((double value) {
+              return DropdownMenuItem<double>(
+                value: value,
+                child: Text(
+                  value % 1 == 0
+                      ? "${value.toInt()} ${"liter".tr}"
+                      : "$value ${"liter".tr}",
+                ),
+              );
+            }).toList(),
+            onChanged: (val) {
+              if (val != null) {
+                selectedLiters.value = val;
+              }
+            },
+          ),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          "Available: ${reducedOrder.value == "Morning" ? morningLiters : eveningLiters} liters",
+          style: AppTextStyle.small12.copyWith(
+            color: Colors.grey.shade600,
+            fontStyle: FontStyle.italic,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildDatePicker(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          "select_date".tr,
+          style: AppTextStyle.small14.copyWith(
+            fontWeight: FontWeight.w500,
+            color: Colors.grey.shade600,
+          ),
+        ),
+        const SizedBox(height: 8),
+        GestureDetector(
+          onTap: () => _pickDate(context),
+          child: Container(
+            height: 50,
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            decoration: BoxDecoration(
+              color: AppColors.appBgColor,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: Colors.grey.shade300),
+            ),
+            child: Row(
+              children: [
+                Icon(
+                  Icons.calendar_today_rounded,
+                  color: Colors.grey.shade600,
+                  size: 20,
+                ),
+                const SizedBox(width: 12),
+                Text(
+                  selectedDate.value == null
+                      ? "choose_date".tr
+                      : "${selectedDate.value!.day}/${selectedDate.value!.month}/${selectedDate.value!.year}",
+                  style: AppTextStyle.small14,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildSlotSelector() {
+    final hasMorning = morningLiters != 0;
+    final hasEvening = eveningLiters != 0;
+
+    // If no slots available
+    if (!hasMorning && !hasEvening) {
+      return Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.grey.shade100,
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Center(
+          child: Text(
+            "no_delivery_slots_available".tr,
+            style: AppTextStyle.small14.copyWith(color: Colors.grey.shade600),
+          ),
+        ),
+      );
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          "select_slot".tr,
+          style: AppTextStyle.small14.copyWith(
+            fontWeight: FontWeight.w500,
+            color: Colors.grey.shade600,
+          ),
+        ),
+        const SizedBox(height: 8),
+        Row(
+          children: [
+            if (hasMorning)
+              Expanded(
+                child: _buildSlotButton(
+                  "Morning",
+                  Icons.wb_twilight_rounded,
+                  hasMorning,
+                  hasEvening,
+                ),
+              ),
+            if (hasMorning && hasEvening) const SizedBox(width: 12),
+            if (hasEvening)
+              Expanded(
+                child: _buildSlotButton(
+                  "Evening",
+                  Icons.nightlight_round_rounded,
+                  hasMorning,
+                  hasEvening,
+                ),
+              ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildSlotButton(
+      String slot,
+      IconData icon,
+      bool hasMorning,
+      bool hasEvening,
+      ) {
+    final isSelected = reducedOrder.value == slot;
+    final isSingleSlot =
+        (hasMorning && !hasEvening) || (!hasMorning && hasEvening);
+
+    return GestureDetector(
+      onTap: () {
+        reducedOrder.value = slot;
+        _updateLitersForSlot();
+      },
+      child: Container(
+        height: 50,
+        decoration: BoxDecoration(
+          color: isSelected ? Colors.orange : AppColors.appBgColor,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: isSelected ? Colors.orange : Colors.grey.shade300,
+          ),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              icon,
+              size: 18,
+              color: isSelected ? Colors.white : Colors.grey.shade600,
+            ),
+            if (!isSingleSlot) const SizedBox(width: 6),
+            Text(
+              slot.toLowerCase().tr,
+              style: AppTextStyle.small14.copyWith(
+                color: isSelected ? Colors.white : Colors.black87,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildOrderButton(BuildContext context) {
+    final isEnabled = selectedDate.value != null &&
+        literOptions.isNotEmpty &&
+        selectedLiters.value <= (reducedOrder.value == "Morning" ? morningLiters : eveningLiters);
+
+    return SizedBox(
+      width: double.infinity,
+      child: PrimaryButton(
+        text: "order_reduced_milk".tr,
+        height: 50,
+        color: isEnabled ? Colors.orange : Colors.grey.shade300,
+        textColor: isEnabled ? Colors.white : Colors.grey.shade600,
+        loading: _controller.isReducedMilkLoading.value,
+        onPressed: isEnabled
+            ? () {
+          final body = {
+            "slot": reducedOrder.value.toLowerCase(),
+            "liters": selectedLiters.value,
+            "requestedForDate":
+            "${selectedDate.value!.year}-${selectedDate.value!.month.toString().padLeft(2, '0')}-${selectedDate.value!.day.toString().padLeft(2, '0')}",
+          };
+          print("Body :: $body");
+          _controller.reducedMilk(context, body).then((_) {
+            selectedDate.value = null;
+            if (onOrderComplete != null) {
+              onOrderComplete!();
+            }
+          });
+        }
+            : null,
+      ),
+    );
+  }
+}
+/*class OrderReducedMilkCard extends StatelessWidget {
   final VoidCallback? onOrderComplete;
 
   OrderReducedMilkCard({super.key, this.onOrderComplete});
@@ -1090,6 +1482,7 @@ class OrderReducedMilkCard extends StatelessWidget {
 
   Widget _buildLitersSelector() {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
@@ -1312,7 +1705,7 @@ class OrderReducedMilkCard extends StatelessWidget {
       ),
     );
   }
-}
+}*/
 
 /// =============================
 /// Enhanced No Order Milk Card

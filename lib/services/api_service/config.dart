@@ -6,6 +6,7 @@ class Config {
   static String milkHistory = '/api/milk/milk-history';
   static String cancelOrder = '/api/milk/cancel-order';
   static String extraOrder = '/api/users/';
+  static String lessMilk = '/api/milk/';
   static String paymentSummery = '/api/milk/payment-summery';
   static String employee = '/api/employee/get-employee';
   static String pendingMonth = '/api/get-pending-month';

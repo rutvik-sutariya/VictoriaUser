@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -114,11 +113,9 @@ class ApiController extends GetxController {
     isUserLoading.value = true;
     try {
       final response = await ApiManager.instance.post(
-        endpoint: Config.resetSound ,
+        endpoint: Config.resetSound,
         headers: false,
-        body: {
-          'userId' : Constant.userId.value
-        },
+        body: {'userId': Constant.userId.value},
       );
       final jsonData = jsonDecode(response.body);
       print("Reset Sound :: $jsonData");
@@ -220,10 +217,11 @@ class ApiController extends GetxController {
     try {
       final response = await ApiManager.instance.post(
         endpoint:
-            "${Config.extraOrder}${Constant.userId.value}/lessmilk-request",
+            "${Config.lessMilk}${Constant.userId.value}/lessmilk-request",
         headers: true,
         body: body,
       );
+      print('Less Milk :: ${response.body}');
       final jsonData = jsonDecode(response.body);
 
       if (response.statusCode == 200) {
@@ -342,7 +340,7 @@ class ApiController extends GetxController {
       print("Notification :: ${response.body}");
       if (response.statusCode == 200) {
         notificationDetails(notificationModelFromJson(response.body));
-        if(jsonData['sound'] == true) {
+        if (jsonData['sound'] == true) {
           AudioService().playClick();
           resetSound(context);
         }
