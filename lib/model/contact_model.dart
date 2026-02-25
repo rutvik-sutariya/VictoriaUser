@@ -22,13 +22,21 @@ class ContactModel {
   factory ContactModel.fromJson(Map<String, dynamic> json) => ContactModel(
     success: json["success"],
     count: json["count"],
-    data: json["data"] == null ? [] : List<ContactData>.from(json["data"]!.map((x) => ContactData.fromJson(x))),
+    data: json["data"] == null
+        ? []
+        : json["data"] is List
+        ? List<ContactData>.from(json["data"]!.map((x) => ContactData.fromJson(x)))
+        : [ContactData.fromJson(json["data"])], // Handle single object case
   );
 
   Map<String, dynamic> toJson() => {
     "success": success,
     "count": count,
-    "data": data == null ? [] : List<dynamic>.from(data!.map((x) => x.toJson())),
+    "data": data == null
+        ? []
+        : data!.length == 1
+        ? data!.first.toJson() // If only one item, return as object
+        : List<dynamic>.from(data!.map((x) => x.toJson())), // If multiple, return as list
   };
 }
 

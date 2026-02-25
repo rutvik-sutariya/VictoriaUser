@@ -134,6 +134,7 @@ final Map<String, String> guIN = {
   "order_milk": "દૂધ ઓર્ડર કરો",
   "cancel_order": "ઓર્ડર રદ કરો",
   "important_notes": "મહત્વપૂર્ણ નોંધો",
+  "milk_heat":"દૂધ આવે ત્યારે જ તેને ગરમ કરો.",
   "reduced_order_note":
       "સાંજના દૂધના વધ-ઘટ માટે ૫ વાગ્યા પહેલા જાણવું જરૂરી છે. ઓર્ડર કન્ફર્મ થયા પછી સંશોધિત અથવા રદ્દ કરી શકાશે નહીં.",
   "extra_order_note":

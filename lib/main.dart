@@ -103,3 +103,22 @@ class _MyAppState extends State<MyApp> {
     return const Locale('gu', 'IN');
   }
 }
+
+
+
+
+/// key.properties
+// storePassword=123456
+// keyPassword=123456
+// keyAlias=key0
+// storeFile=victoria-keystore.jks
+
+/// jks generate type
+// keytool -genkey -v -keystore ~/victoria_milk_release.keystore \
+// -keyalg RSA -keysize 2048 -validity 10000 \
+// -alias victoria_milk
+
+/// .aab generate
+// flutter clean
+// flutter pub get
+// flutter build appbundle --release

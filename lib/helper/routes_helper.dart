@@ -15,7 +15,6 @@ class Routes {
   static String dashboardPage = "/dashboardPage";
   static String languagePage = "/languagePage";
   static String notificationPage = "/notificationPage";
-  static String termsPage = "/termsPage";
   static String supportPage = "/supportPage";
   // static String milkOrderPage = "/milkOrderPage";
   static String notificationsPage = "/notificationsPage";
@@ -47,12 +46,6 @@ final getPages = [
   GetPage(
     name: Routes.notificationPage,
     page: () => NotificationScreen(),
-    transition: Transition.rightToLeft,
-  ),
-
-  GetPage(
-    name: Routes.termsPage,
-    page: () => TermsScreen(),
     transition: Transition.rightToLeft,
   ),
 

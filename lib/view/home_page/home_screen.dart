@@ -673,10 +673,10 @@ class OrderExtraMilkCard extends StatelessWidget {
     final dayAfterTomorrow = now.add(Duration(days: 2));
     final DateTime? picked = await showDatePicker(
       context: context,
-        initialDate: now, // ✅ By default आज का date select हो
-        firstDate: now, // आज से शुरू
-        lastDate: dayAfterTomorrow, // परसों तक
-        );
+      initialDate: now, // ✅ By default आज का date select हो
+      firstDate: now, // आज से शुरू
+      lastDate: dayAfterTomorrow, // परसों तक
+    );
 
     if (picked != null) selectedDate.value = picked;
   }
@@ -998,10 +998,13 @@ class OrderReducedMilkCard extends StatelessWidget {
   final Rx<double> selectedLiters = 0.5.obs;
   final ApiController _controller = Get.put(ApiController());
 
-
   // Get morning and evening liters from user data and convert to double
-  double get morningLiters => (_controller.userDetails.value.data?.morningLiters ?? 0).toDouble();
-  double get eveningLiters => (_controller.userDetails.value.data?.eveningLiters ?? 0).toDouble();
+  double get morningLiters =>
+      (_controller.userDetails.value.data?.morningLiters ?? 0).toDouble();
+
+  double get eveningLiters =>
+      (_controller.userDetails.value.data?.eveningLiters ?? 0).toDouble();
+
   // Generate liter options based on available liters for selected slot
   List<double> get literOptions {
     final double maxLiters = reducedOrder.value == "Morning"
@@ -1044,7 +1047,7 @@ class OrderReducedMilkCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Obx(
-          () => Container(
+      () => Container(
         decoration: BoxDecoration(
           color: AppColors.appWhiteColor,
           borderRadius: BorderRadius.circular(16),
@@ -1117,7 +1120,11 @@ class OrderReducedMilkCard extends StatelessWidget {
                   ),
                   child: Row(
                     children: [
-                      Icon(Icons.info_outline, color: Colors.orange.shade700, size: 20),
+                      Icon(
+                        Icons.info_outline,
+                        color: Colors.orange.shade700,
+                        size: 20,
+                      ),
                       const SizedBox(width: 8),
                       Expanded(
                         child: Text(
@@ -1298,11 +1305,11 @@ class OrderReducedMilkCard extends StatelessWidget {
   }
 
   Widget _buildSlotButton(
-      String slot,
-      IconData icon,
-      bool hasMorning,
-      bool hasEvening,
-      ) {
+    String slot,
+    IconData icon,
+    bool hasMorning,
+    bool hasEvening,
+  ) {
     final isSelected = reducedOrder.value == slot;
     final isSingleSlot =
         (hasMorning && !hasEvening) || (!hasMorning && hasEvening);
@@ -1344,9 +1351,11 @@ class OrderReducedMilkCard extends StatelessWidget {
   }
 
   Widget _buildOrderButton(BuildContext context) {
-    final isEnabled = selectedDate.value != null &&
+    final isEnabled =
+        selectedDate.value != null &&
         literOptions.isNotEmpty &&
-        selectedLiters.value <= (reducedOrder.value == "Morning" ? morningLiters : eveningLiters);
+        selectedLiters.value <=
+            (reducedOrder.value == "Morning" ? morningLiters : eveningLiters);
 
     return SizedBox(
       width: double.infinity,
@@ -1358,20 +1367,20 @@ class OrderReducedMilkCard extends StatelessWidget {
         loading: _controller.isReducedMilkLoading.value,
         onPressed: isEnabled
             ? () {
-          final body = {
-            "slot": reducedOrder.value.toLowerCase(),
-            "liters": selectedLiters.value,
-            "requestedForDate":
-            "${selectedDate.value!.year}-${selectedDate.value!.month.toString().padLeft(2, '0')}-${selectedDate.value!.day.toString().padLeft(2, '0')}",
-          };
-          print("Body :: $body");
-          _controller.reducedMilk(context, body).then((_) {
-            selectedDate.value = null;
-            if (onOrderComplete != null) {
-              onOrderComplete!();
-            }
-          });
-        }
+                final body = {
+                  "slot": reducedOrder.value.toLowerCase(),
+                  "liters": selectedLiters.value,
+                  "requestedForDate":
+                      "${selectedDate.value!.year}-${selectedDate.value!.month.toString().padLeft(2, '0')}-${selectedDate.value!.day.toString().padLeft(2, '0')}",
+                };
+                print("Body :: $body");
+                _controller.reducedMilk(context, body).then((_) {
+                  selectedDate.value = null;
+                  if (onOrderComplete != null) {
+                    onOrderComplete!();
+                  }
+                });
+              }
             : null,
       ),
     );
@@ -1734,7 +1743,6 @@ class NoOrderMilkCard extends StatelessWidget {
     if (picked != null) selectedDate.value = picked;
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Obx(
@@ -2024,6 +2032,8 @@ class NotesSection extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 12),
+            _buildNoteItem("milk_heat".tr),
+            const SizedBox(height: 8),
             _buildNoteItem("extra_order_note".tr),
             const SizedBox(height: 8),
             _buildNoteItem("reduced_order_note".tr),

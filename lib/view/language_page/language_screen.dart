@@ -56,13 +56,7 @@ class _LanguageScreenState extends State<LanguageScreen> {
       prefs.setString(LocalStorage.language.value, "gujarati");
     }
 
-    // Optional: Show success message
-    Get.rawSnackbar(
-      message: "language_changed".tr,
-      backgroundColor: AppColors.appPrimaryDarkColor,
-      borderRadius: 10,
-      margin: const EdgeInsets.all(16),
-    );
+
   }
 
   @override

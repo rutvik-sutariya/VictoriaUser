@@ -12,6 +12,8 @@ import 'package:victoria_user/utils/app_colors.dart';
 import 'package:victoria_user/utils/svg_path.dart';
 import 'package:victoria_user/utils/text_styles.dart';
 
+import 'legal_terms_screen.dart';
+
 class SettingScreen extends StatelessWidget {
   SettingScreen({super.key});
 
@@ -193,7 +195,14 @@ class SettingScreen extends StatelessWidget {
               title: 'terms'.tr,
               hasNotification: false,
               onTap: () {
-                Get.toNamed(Routes.termsPage);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => TermsScreen(
+                      url: "https://api.victoriafarm.cloud/terms-and-conditions",
+                    ),
+                  ),
+                );
               },
             ),
             const SizedBox(height: 12),

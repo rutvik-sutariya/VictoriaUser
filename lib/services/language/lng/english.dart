@@ -135,6 +135,7 @@ final Map<String, String> enUS = {
   "order_milk": "Order Milk",
   "cancel_order": "Cancel Order",
   "important_notes": "Important Notes",
+  "milk_heat": "Heat the milk as soon as it arrives.",
   "reduced_order_note":
       "It is necessary to inform about the evening milk increase or decrease before 5 PM.. Orders cannot be modified or cancelled once confirmed.",
   "extra_order_note":
