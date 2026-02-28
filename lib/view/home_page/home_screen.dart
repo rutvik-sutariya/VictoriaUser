@@ -18,6 +18,9 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _controller.milkNotes(context);
+    });
     return Scaffold(
       backgroundColor: AppColors.appBgColor,
       body: SafeArea(
@@ -1996,11 +1999,16 @@ class NoOrderMilkCard extends StatelessWidget {
 /// =============================
 /// Enhanced Notes Section
 /// =============================
+/// =============================
+/// Enhanced Notes Section with Dynamic Data
+/// =============================
 class NotesSection extends StatelessWidget {
   const NotesSection({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final ApiController _controller = Get.find<ApiController>();
+
     return Container(
       decoration: BoxDecoration(
         color: AppColors.appWhiteColor,
@@ -2019,10 +2027,22 @@ class NotesSection extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Header
             Row(
               children: [
-                Icon(Icons.info_outline_rounded, color: Colors.blue.shade600),
-                const SizedBox(width: 8),
+                Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: Colors.blue.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Icon(
+                    Icons.info_outline_rounded,
+                    color: Colors.blue.shade600,
+                    size: 20,
+                  ),
+                ),
+                const SizedBox(width: 12),
                 Text(
                   "important_notes".tr,
                   style: AppTextStyle.small16.copyWith(
@@ -2031,43 +2051,143 @@ class NotesSection extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 12),
-            _buildNoteItem("milk_heat".tr),
-            const SizedBox(height: 8),
-            _buildNoteItem("extra_order_note".tr),
-            const SizedBox(height: 8),
-            _buildNoteItem("reduced_order_note".tr),
-            const SizedBox(height: 8),
-            _buildNoteItem("cancel_order_note".tr),
+            const SizedBox(height: 16),
+
+            // Notes Content with Loading State
+            Obx(() {
+              if (_controller.isNotesLoading.value) {
+                return _buildNotesShimmer();
+              }
+
+              if (_controller.milkNotesDetails.value.data == null ||
+                  _controller.milkNotesDetails.value.data!.isEmpty) {
+                return _buildEmptyNotes();
+              }
+
+              return _buildNotesList(_controller);
+            }),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildNoteItem(String text) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Container(
-          margin: const EdgeInsets.only(top: 4, right: 8),
-          width: 6,
-          height: 6,
-          decoration: const BoxDecoration(
-            color: Colors.blue,
-            shape: BoxShape.circle,
+  Widget _buildNotesList(ApiController controller) {
+    return Column(
+      children: controller.milkNotesDetails.value.data!.map((note) {
+        return Padding(
+          padding: const EdgeInsets.only(bottom: 12),
+          child: _buildNoteItem(
+            title: note.english ?? '',
+            description: note.gujarati ?? '',
           ),
-        ),
-        Expanded(
-          child: Text(
-            text,
-            style: AppTextStyle.small14.copyWith(
-              color: Colors.grey.shade700,
-              height: 1.4,
+        );
+      }).toList(),
+    );
+  }
+
+  Widget _buildNoteItem({required String title, required String description}) {
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: AppColors.appBgColor,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.grey.shade200),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // English Note
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                margin: const EdgeInsets.only(top: 4),
+                child: Icon(
+                  Icons.circle,
+                  size: 6,
+                  color:AppColors.appPrimaryDarkColor,
+                ),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Text(
+                  title,
+                  style: AppTextStyle.small14.copyWith(
+                    color: Colors.grey.shade800,
+                    height: 1.4,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+
+          // Gujarati Note (if available)
+          if (description.isNotEmpty) ...[
+            Container(
+              padding: const EdgeInsets.only(left: 16),
+              child: Text(
+                description,
+                style: AppTextStyle.small14.copyWith(
+                  color: Colors.grey.shade600,
+                  height: 1.4,
+                  // fontStyle: FontStyle.italic,
+                ),
+              ),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+
+  Widget _buildNotesShimmer() {
+    return Column(
+      children: List.generate(4, (index) => Padding(
+        padding: const EdgeInsets.only(bottom: 12),
+        child: Shimmer.fromColors(
+          baseColor: Colors.grey.shade300,
+          highlightColor: Colors.grey.shade100,
+          child: Container(
+            height: 80,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
             ),
           ),
         ),
-      ],
+      )),
+    );
+  }
+
+  Widget _buildEmptyNotes() {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: AppColors.appBgColor,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.grey.shade200, style: BorderStyle.solid),
+      ),
+      child: Center(
+        child: Column(
+          children: [
+            Icon(
+              Icons.note_alt_outlined,
+              size: 40,
+              color: Colors.grey.shade400,
+            ),
+            const SizedBox(height: 8),
+            Text(
+              "no_notes_available".tr,
+              style: AppTextStyle.small14.copyWith(
+                color: Colors.grey.shade600,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

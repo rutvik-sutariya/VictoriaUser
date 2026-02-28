@@ -12,6 +12,7 @@ import '../helper/routes_helper.dart';
 import '../main.dart';
 import '../model/contact_model.dart';
 import '../model/milk_history_model.dart';
+import '../model/milk_notes_model.dart';
 import '../model/month_summery_model.dart';
 import '../model/user_model.dart';
 import '../services/api_service/api_manager.dart';
@@ -36,7 +37,7 @@ class ApiController extends GetxController {
   final RxBool isNotificationLoading = false.obs;
   final RxBool isExportLoading = false.obs;
   final RxBool isMonthSummeryLoading = false.obs;
-  final RxBool isContactLoading = false.obs;
+  final RxBool isContactLoading = false.obs;  final RxBool isNotesLoading = false.obs;
 
   final RxString imageUrl = "".obs;
 
@@ -47,6 +48,7 @@ class ApiController extends GetxController {
   final Rx<NotificationModel> notificationDetails = NotificationModel().obs;
   final Rx<MonthSummeryModel> monthDetails = MonthSummeryModel().obs;
   final Rx<ContactModel> contactDetails = ContactModel().obs;
+  final Rx<MilkNotesModel> milkNotesDetails = MilkNotesModel().obs;
 
   // Login Api
   Future<void> login(BuildContext context, body) async {
@@ -55,7 +57,7 @@ class ApiController extends GetxController {
     try {
       final response = await ApiManager.instance.post(
         endpoint: Config.login,
-        headers: false,
+        
         body: body,
       );
       final jsonData = jsonDecode(response.body);
@@ -88,7 +90,7 @@ class ApiController extends GetxController {
     try {
       final response = await ApiManager.instance.post(
         endpoint: Config.getUser + Constant.userId.value,
-        headers: false,
+        
         body: {},
       );
       final jsonData = jsonDecode(response.body);
@@ -114,7 +116,7 @@ class ApiController extends GetxController {
     try {
       final response = await ApiManager.instance.post(
         endpoint: Config.resetSound,
-        headers: false,
+        
         body: {'userId': Constant.userId.value},
       );
       final jsonData = jsonDecode(response.body);
@@ -133,13 +135,35 @@ class ApiController extends GetxController {
     }
   }
 
+  // Get User
+  Future<void> milkNotes(BuildContext context) async {
+    isNotesLoading.value = true;
+    try {
+      final response = await ApiManager.instance.get(
+        endpoint: Config.milkNotes,
+      );
+      print("milkNotes :: ${response.body}");
+      if (response.statusCode == 200) {
+        milkNotesDetails(milkNotesModelFromJson(response.body));
+        print("Milk Notes fetched successfully");
+      } else {
+        AppSnackbar.error(context, "Failed to load notes");
+      }
+    } catch (e) {
+      print("Error fetching milk notes: $e");
+      AppSnackbar.error(context, "Error loading notes");
+    } finally {
+      isNotesLoading.value = false;
+    }
+  }
+
   // Milk History
   Future<void> getMilkHistory(BuildContext context, body) async {
     isMilkHisLoading.value = true;
     try {
       final response = await ApiManager.instance.post(
         endpoint: Config.milkHistory,
-        headers: true,
+        
         body: body,
       );
       final jsonData = jsonDecode(response.body);
@@ -165,7 +189,7 @@ class ApiController extends GetxController {
     try {
       final response = await ApiManager.instance.post(
         endpoint: Config.cancelOrder,
-        headers: true,
+        
         body: body,
       );
       final jsonData = jsonDecode(response.body);
@@ -191,7 +215,7 @@ class ApiController extends GetxController {
     try {
       final response = await ApiManager.instance.post(
         endpoint: "${Config.extraOrder}${Constant.userId.value}/extra",
-        headers: true,
+        
         body: body,
       );
       final jsonData = jsonDecode(response.body);
@@ -216,9 +240,8 @@ class ApiController extends GetxController {
     isReducedMilkLoading.value = true;
     try {
       final response = await ApiManager.instance.post(
-        endpoint:
-            "${Config.lessMilk}${Constant.userId.value}/lessmilk-request",
-        headers: true,
+        endpoint: "${Config.lessMilk}${Constant.userId.value}/lessmilk-request",
+        
         body: body,
       );
       print('Less Milk :: ${response.body}');
@@ -245,7 +268,7 @@ class ApiController extends GetxController {
     try {
       final response = await ApiManager.instance.post(
         endpoint: Config.paymentSummery,
-        headers: true,
+        
         body: body,
       );
       final jsonData = jsonDecode(response.body);
@@ -271,7 +294,7 @@ class ApiController extends GetxController {
     try {
       final response = await ApiManager.instance.post(
         endpoint: Config.monthSummery,
-        headers: true,
+        
         body: {"userId": Constant.userId.value},
       );
       final jsonData = jsonDecode(response.body);
@@ -297,7 +320,7 @@ class ApiController extends GetxController {
     try {
       final response = await ApiManager.instance.get(
         endpoint: Config.employee,
-        headers: true,
+        
       );
 
       final jsonData = jsonDecode(response.body);
@@ -333,7 +356,7 @@ class ApiController extends GetxController {
     try {
       final response = await ApiManager.instance.post(
         endpoint: Config.notification + Constant.userId.value,
-        headers: true,
+        
         body: {},
       );
       final jsonData = jsonDecode(response.body);
@@ -360,7 +383,7 @@ class ApiController extends GetxController {
     try {
       final response = await ApiManager.instance.get(
         endpoint: Config.contactUs,
-        headers: false,
+        
       );
       final jsonData = jsonDecode(response.body);
       print("Contact Us :: ${response.body}");
@@ -441,7 +464,7 @@ class ApiController extends GetxController {
     try {
       final response = await ApiManager.instance.post(
         endpoint: Config.cashPayment,
-        headers: true,
+        
         body: body,
       );
 
@@ -476,7 +499,7 @@ class ApiController extends GetxController {
     try {
       final response = await ApiManager.instance.post(
         endpoint: Config.upiPayment,
-        headers: true,
+        
         body: body,
       );
 

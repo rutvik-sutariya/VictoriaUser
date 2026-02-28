@@ -149,7 +149,7 @@ final Map<String, String> enUS = {
   "friday": "Friday",
   "saturday": "Saturday",
   "sunday": "Sunday",
-
+  "no_notes_available": "No notes available at the moment",
   // Payment Screen
   "milk_payment": "Milk Payment",
   "monthly_summary": "Monthly Summary",

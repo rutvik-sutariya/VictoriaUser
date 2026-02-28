@@ -148,7 +148,7 @@ final Map<String, String> guIN = {
   "friday": "શુક્રવાર",
   "saturday": "શનિવાર",
   "sunday": "રવિવાર",
-
+  "no_notes_available": "હાલમાં કોઈ નોંધ ઉપલબ્ધ નથી",
   // Payment Screen
   "milk_payment": "દૂધની ચુકવણી",
   "monthly_summary": "માસિક સારાંશ",
